@@ -3,5 +3,8 @@
     { "source": "/", "destination": "/Home.dc.html" },
     { "source": "/card", "destination": "/Card.dc.html" },
     { "source": "/writing", "destination": "/Writing.dc.html" }
+  ],
+  "crons": [
+    { "path": "/api/cron/import-writing", "schedule": "0 13 * * *" }
   ]
 }

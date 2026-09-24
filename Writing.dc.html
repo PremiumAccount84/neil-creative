@@ -122,24 +122,35 @@ input,select,button{font:inherit}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;feedState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loaded&quot;,&quot;loading&quot;,&quot;empty&quot;,&quot;refresh-failed&quot;,&quot;error&quot;],&quot;default&quot;:&quot;loaded&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;sampleFeed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;actual&quot;,&quot;12 sample&quot;],&quot;default&quot;:&quot;actual&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;demoSubscribe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;}}">
-const ARTICLES = [
-  { title:'The Best Leaders Make Themselves Less Necessary', date:'Sep 23, 2026', iso:'2026-09-23',
-    excerpt:'Yesterday I sat down with the GM of a coffee shop and asked him a question: what’s the common denominator behind a successful business operation?',
-    url:'https://thechrisneil.substack.com/p/the-best-leaders-make-themselves' },
-  { title:'The Product Is Not the Advantage. The Operating System Is.', date:'', iso:'', excerpt:'',
-    url:'https://thechrisneil.substack.com/p/the-product-is-not-the-advantage' },
-  { title:'Stop Building for Vibes. Build to Understand.', date:'', iso:'', excerpt:'',
-    url:'https://thechrisneil.substack.com/p/stop-building-for-vibes-build-to' },
-];
+const SUPABASE_URL = 'https://htcunyeepqjcbxlfpcny.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_v_UsqCq_AHjTqptN93prDw_yCsZc99t';
 
 class Component extends DCLogic {
-  state = { override:null, idx:1, sOpen:false, subChannel:'email', shared:false };
+  state = { override:null, idx:1, sOpen:false, subChannel:'email', shared:false, posts:[], loadState:'loading' };
   feedRef = React.createRef();
 
-  componentDidMount() { this.init(); }
+  componentDidMount() { this.init(); this.loadPosts(); }
   componentDidUpdate(prev) {
-    if (prev.feedState !== this.props.feedState || prev.sampleFeed !== this.props.sampleFeed) { this.ready = false; this.setState({ idx: 1 }); }
+    if (prev.sampleFeed !== this.props.sampleFeed) { this.ready = false; this.setState({ idx: 1 }); }
     if (!this.ready) this.init();
+  }
+  loadPosts() {
+    fetch(SUPABASE_URL + '/rest/v1/writing_posts?select=title,url,excerpt,published_at&order=published_at.desc.nullslast', {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+    })
+      .then(res => { if (!res.ok) throw new Error('feed failed'); return res.json(); })
+      .then(rows => {
+        const posts = rows.map(r => ({
+          title: r.title,
+          url: r.url,
+          excerpt: r.excerpt || '',
+          date: r.published_at ? new Date(r.published_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '',
+          iso: r.published_at ? r.published_at.slice(0, 10) : '',
+        }));
+        this.ready = false;
+        this.setState({ posts, loadState: posts.length ? 'loaded' : 'empty', override:null });
+      })
+      .catch(() => this.setState({ loadState:'error', override:null }));
   }
   init() {
     const el = this.feedRef.current;
@@ -151,11 +162,12 @@ class Component extends DCLogic {
   componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.st); clearTimeout(this.sh); }
 
   articles() {
-    if ((this.props.sampleFeed ?? 'actual') !== '12 sample') return ARTICLES;
-    const extra = Array.from({ length: 12 - ARTICLES.length }, (_, k) => ({ title:'Sample note ' + (ARTICLES.length + k + 1) + ' (prototype placeholder)', date:'', iso:'', excerpt:'', url:'https://thechrisneil.substack.com/' }));
-    return [...ARTICLES, ...extra];
+    const real = this.state.posts;
+    if ((this.props.sampleFeed ?? 'actual') !== '12 sample') return real;
+    const extra = Array.from({ length: Math.max(0, 12 - real.length) }, (_, k) => ({ title:'Sample note ' + (real.length + k + 1) + ' (prototype placeholder)', date:'', iso:'', excerpt:'', url:'https://thechrisneil.substack.com/' }));
+    return [...real, ...extra];
   }
-  feed() { return this.state.override ?? this.props.feedState ?? 'loaded'; }
+  feed() { return this.state.override ?? this.state.loadState; }
 
   // real cards (without clones)
   realCards() {
@@ -250,7 +262,7 @@ class Component extends DCLogic {
         try { if (navigator.share) await navigator.share({ url }); else await navigator.clipboard.writeText(url); } catch (e) {}
         this.setState({ shared:true }); clearTimeout(this.sh); this.sh = setTimeout(() => this.setState({ shared:false }), 1600);
       },
-      retry: () => { this.setState({ override:'loading', idx:0 }); clearTimeout(this.t); this.t = setTimeout(() => { this.setState({ override:'loaded', idx:1 }, () => this.jumpTo(1)); }, 1200); },
+      retry: () => { this.setState({ override:'loading', idx:0 }); this.loadPosts(); },
       sOpen, subChannel,
       subEmail: openSub('email'), subText: openSub('text'), subBoth: openSub('both'),
       closeSub: () => this.setState({ sOpen:false }),

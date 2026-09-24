@@ -115,6 +115,8 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:760},&quot;modal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;demoOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const SUPABASE_URL = 'https://htcunyeepqjcbxlfpcny.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_v_UsqCq_AHjTqptN93prDw_yCsZc99t';
 const CODES = [{v:'+1',l:'US +1'},{v:'+1 ',l:'CA +1'},{v:'+44',l:'UK +44'},{v:'+234',l:'NG +234'},{v:'+233',l:'GH +233'},{v:'+61',l:'AU +61'},{v:'+49',l:'DE +49'},{v:'+33',l:'FR +33'},{v:'+91',l:'IN +91'}];
 const BLANK = { name:'', email:'', cc:'+1', phone:'', okEmail:false, okSms:false };
 
@@ -154,15 +156,23 @@ class Component extends DCLogic {
   run(onlyText) {
     if (this.state.status === 'submitting') return;
     this.setState(s => ({ status:'submitting', attempts: s.attempts + 1 }));
-    this.t = setTimeout(() => {
-      const out = this.props.demoOutcome ?? 'success';
-      const both = this.state.channel === 'both';
-      if (onlyText) { this.setState({ status:'done', result:{ kind:'success' } }); return; }
-      if (out === 'fail' && this.state.attempts === 1) { this.setState({ status:'error' }); return; }
-      let kind = out === 'fail' ? 'success' : out;
-      if (kind === 'partial' && !both) kind = 'success';
-      this.setState({ status:'done', result:{ kind } });
-    }, 1100);
+    const { v, channel } = this.state;
+    const em = channel !== 'text', ph = channel !== 'email';
+    fetch(SUPABASE_URL + '/rest/v1/rpc/submit_subscription', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({
+        p_name: v.name || null,
+        p_email: em ? v.email : null,
+        p_phone: ph ? (v.cc.trim() + v.phone.replace(/\D/g, '')) : null,
+        p_channel: channel,
+        p_consent_email: em ? !!v.okEmail : false,
+        p_consent_sms: ph ? !!v.okSms : false,
+      }),
+    })
+      .then(res => { if (!res.ok) throw new Error('subscribe failed'); return res.json(); })
+      .then(kind => this.setState({ status:'done', result:{ kind } }))
+      .catch(() => this.setState({ status:'error' }));
   }
 
   submit = (e) => {

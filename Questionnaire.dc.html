@@ -171,6 +171,8 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:600,&quot;height&quot;:800},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;demoOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const SUPABASE_URL = 'https://htcunyeepqjcbxlfpcny.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_v_UsqCq_AHjTqptN93prDw_yCsZc99t';
 const ROLES = ['Potential App User','Potential Investor','Potential Team Member','Potential Strategic Partner'];
 const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','Washington, D.C.','Puerto Rico','International'];
 const EXPERTISE = ['Real Estate','Investing / Venture Capital','Finance / Banking','Private Equity','Legal','Insurance','Technology','AI / Software','Product / UX Design','Marketing / Branding','Content Creation / Media','Sales / Business Development','Operations / Strategy','Recruiting / Talent','Executive Leadership','Entrepreneurship / Startups','Construction / Development','Architecture / Interior Design','Healthcare','Education','Government / Public Sector','Hospitality','Ecommerce','Manufacturing / Logistics','Trades / Skilled Labor','Community / Nonprofit','Student','Other'];
@@ -227,12 +229,25 @@ class Component extends DCLogic {
   submit() {
     if (this.state.status === 'submitting') return;
     const subId = this.state.subId || ('sub_' + Math.random().toString(36).slice(2, 10));
+    const f = this.state.f;
     this.setState(s => ({ status:'submitting', attempts: s.attempts + 1, subId }));
-    this.t = setTimeout(() => {
-      const failNow = (this.props.demoOutcome ?? 'success') === 'fail' && this.state.attempts === 1;
-      if (failNow) this.setState({ status:'error' });
-      else this.setState({ status:'idle', step:'done' });
-    }, 1200);
+    fetch(SUPABASE_URL + '/rest/v1/rpc/submit_questionnaire', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({
+        p_sub_id: subId,
+        p_flow: f.role === APP ? 'app' : 'referral',
+        p_role: f.role,
+        p_first_name: f.first,
+        p_last_name: f.last,
+        p_email: f.email,
+        p_phone: f.phone || null,
+        p_company: f.company || null,
+        p_background: [f.state, f.expertise, f.affiliation].filter(Boolean).join(' | ') || null,
+      }),
+    })
+      .then(res => { if (!res.ok) throw new Error('submit failed'); this.setState({ status:'idle', step:'done' }); })
+      .catch(() => this.setState({ status:'error' }));
   }
 
   back = () => {
