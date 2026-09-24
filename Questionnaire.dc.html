@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"></helmet>
+<div onKeyDown="{{ onKey }}" style="position:fixed;inset:0;z-index:80;display:{{ display }};align-items:center;justify-content:center;background:rgba(0,0,0,0.78);font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;">
+  <div role="dialog" aria-modal="true" aria-labelledby="{{ titleId }}" style="position:relative;display:flex;flex-direction:column;width:100%;max-width:{{ maxW }};height:{{ panelH }};max-height:{{ maxH }};background:#0B0B0B;border-radius:{{ radius }};overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.35);">
+
+    <div style="flex:0 0 auto;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;border-bottom:1px solid #262626;">
+      <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ back }}" aria-label="Previous step" style="width:44px;height:44px;border-radius:36px;border:0;background:#1A1A1A;color:#FFFFFF;font-size:20px;cursor:pointer;white-space:nowrap" style-hover="background:#262626;">←</button>
+      </sc-if>
+      <sc-if value="{{ noBack }}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0;">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#A6A6A6;">{{ progressLabel }}</span>
+        <div aria-hidden="true" style="width:100%;max-width:220px;height:4px;border-radius:999px;background:#262626;overflow:hidden;">
+          <div style="height:100%;width:{{ progressPct }};background:#CCFF00;border-radius:999px;transition:width 240ms ease;"></div>
+        </div>
+      </div>
+      <button type="button" onClick="{{ close }}" aria-label="Close questionnaire" style="width:44px;height:44px;border-radius:36px;border:0;background:#1A1A1A;color:#FFFFFF;font-size:22px;cursor:pointer;white-space:nowrap" style-hover="background:#262626;">×</button>
+    </div>
+
+    <form onSubmit="{{ next }}" noValidate="{{ true }}" style="flex:1 1 auto;display:flex;flex-direction:column;min-height:0;">
+      <div style="flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:clamp(24px,5vw,40px) clamp(20px,5vw,40px);">
+
+        <sc-if value="{{ is.welcome }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:24px;">
+            <div style="position:relative;width:96px;height:96px;border-radius:999px;overflow:hidden;background:#1A1A1A;"><img src="assets/cj-lounge.png" alt="" style="position:absolute;top:-8%;left:-184%;width:400%;max-width:none;height:auto;display:block;"></div>
+            <h2 id="q-welcome" style="margin:0;font-size:clamp(30px,7vw,40px);font-weight:400;line-height:1.05;letter-spacing:-0.02em;text-wrap:balance;">Hey! This is Christian Neil Jones.<span style="display:block;color:#CCFF00;">Thanks for connecting with me!</span></h2>
+            <p style="margin:0;font-size:17px;line-height:1.6;color:#CCCCCC;text-wrap:pretty;max-width:52ch;">I made this to be intentional about keeping in touch with the people I meet. I don’t take any interaction for granted. This is about what we can potentially build, support, or create together.</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.role }}" hint-placeholder-val="{{ false }}">
+          <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;min-width:0;">
+            <legend id="q-role" style="padding:0;margin-bottom:20px;font-size:clamp(26px,6vw,32px);font-weight:400;line-height:1.1;letter-spacing:-0.01em;">Which best describes you?</legend>
+            <sc-for list="{{ roles }}" as="r" hint-placeholder-count="4">
+              <button type="button" role="radio" aria-checked="{{ r.on }}" onClick="{{ r.pick }}" style="display:grid;grid-template-columns:minmax(0,1fr) 24px;align-items:center;gap:12px;min-height:60px;padding:14px 18px;text-align:left;border-radius:16px;cursor:pointer;font-size:17px;font-weight:500;color:#FFFFFF;background:{{ r.bg }};border:1.5px solid {{ r.border }};" style-focus="outline:3px solid rgba(204,255,0,0.5);outline-offset:2px;">
+                <span>{{ r.label }}</span>
+                <span aria-hidden="true" style="width:22px;height:22px;border-radius:999px;box-sizing:border-box;border:{{ r.dot }};"></span>
+              </button>
+            </sc-for>
+            <span role="alert" style="font-size:14px;color:#FF8A7A;">{{ err.role }}</span>
+          </fieldset>
+        </sc-if>
+
+        <sc-if value="{{ is.app }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <img src="assets/deedshare.png" alt="DeedShare app icon on a phone" style="width:100%;aspect-ratio:16/9;object-fit:cover;object-position:60% 40%;border-radius:20px;display:block;">
+            <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#CCFF00;">DeedShare early access</span>
+            <h2 id="q-app" style="margin:0;font-size:clamp(28px,6vw,36px);font-weight:400;line-height:1.05;letter-spacing:-0.02em;">Join early access.</h2>
+            <p style="margin:0;font-size:17px;line-height:1.6;color:#CCCCCC;">Be part of the early rollout of DeedShare. Sign up on the DeedShare site, then come back here if you’d also like to set up a conversation.</p>
+            <a href="https://join.mydeedshare.com/" target="_blank" rel="noopener" onClick="{{ markJoined }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;text-decoration:none;white-space:nowrap" style-hover="background:#D9FF4D;">Join DeedShare ↗</a>
+            <sc-if value="{{ joined }}" hint-placeholder-val="{{ false }}">
+              <p role="status" style="margin:0;font-size:15px;color:#A6A6A6;">DeedShare opened in a new tab.</p>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.name }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <h2 id="q-name" style="margin:0 0 4px;font-size:clamp(26px,6vw,32px);font-weight:400;line-height:1.1;">What’s your name?</h2>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;">First Name
+              <input type="text" autoComplete="given-name" value="{{ f.first }}" onChange="{{ h.first }}" aria-invalid="{{ inv.first }}" style="height:56px;padding:0 16px;font-size:17px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.first }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+              <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.first }}</span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;">Last Name
+              <input type="text" autoComplete="family-name" value="{{ f.last }}" onChange="{{ h.last }}" aria-invalid="{{ inv.last }}" style="height:56px;padding:0 16px;font-size:17px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.last }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+              <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.last }}</span>
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.contact }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <h2 id="q-contact" style="margin:0 0 4px;font-size:clamp(26px,6vw,32px);font-weight:400;line-height:1.1;">How can I reach you?</h2>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;">Email
+              <input type="email" autoComplete="email" inputMode="email" value="{{ f.email }}" onChange="{{ h.email }}" aria-invalid="{{ inv.email }}" style="height:56px;padding:0 16px;font-size:17px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.email }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+              <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.email }}</span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;"><span>Mobile Number <span style="font-weight:400;color:#A6A6A6;">(optional)</span></span>
+              <input type="tel" autoComplete="tel" inputMode="tel" value="{{ f.phone }}" onChange="{{ h.phone }}" aria-invalid="{{ inv.phone }}" style="height:56px;padding:0 16px;font-size:17px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.phone }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+              <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.phone }}</span>
+            </label>
+            <p style="margin:0;font-size:14px;line-height:1.5;color:#8F8F8F;">Used only to follow up on this introduction. This won’t subscribe you to email or texts.</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.background }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <h2 id="q-background" style="margin:0 0 4px;font-size:clamp(26px,6vw,32px);font-weight:400;line-height:1.1;">A little about you.</h2>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;"><span>What state are you based in? <span style="font-weight:400;color:#A6A6A6;">(optional)</span></span>
+              <select value="{{ f.state }}" onChange="{{ h.state }}" style="height:56px;padding:0 12px;font-size:17px;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;" style-focus="border-color:#CCFF00;">
+                <option value="">Select State</option>
+                <sc-for list="{{ states }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;"><span>What’s your area of expertise? <span style="font-weight:400;color:#A6A6A6;">(optional)</span></span>
+              <select value="{{ f.expertise }}" onChange="{{ h.expertise }}" style="height:56px;padding:0 12px;font-size:17px;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;" style-focus="border-color:#CCFF00;">
+                <option value="">Select Expertise</option>
+                <sc-for list="{{ expertise }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.company }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <sc-if value="{{ failed }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;background:#2A1614;border:1px solid #5C2A24;">
+                <strong style="font-size:15px;color:#FF8A7A;">Your answers didn’t send.</strong>
+                <span style="font-size:15px;line-height:1.45;color:#E7D3CF;">Everything you entered is saved here. Try again when you’re ready.</span>
+              </div>
+            </sc-if>
+            <h2 id="q-company" style="margin:0 0 4px;font-size:clamp(26px,6vw,32px);font-weight:400;line-height:1.1;">Where do you work?</h2>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;">Company / Organization
+              <input type="text" autoComplete="organization" placeholder="(If applicable)" value="{{ f.company }}" onChange="{{ h.company }}" style="height:56px;padding:0 16px;font-size:17px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:500;"><span>What is your current affiliation? <span style="font-weight:400;color:#A6A6A6;">(optional)</span></span>
+              <select value="{{ f.affiliation }}" onChange="{{ h.affiliation }}" style="height:56px;padding:0 12px;font-size:17px;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;" style-focus="border-color:#CCFF00;">
+                <option value="">Select Affiliation</option>
+                <sc-for list="{{ affiliations }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.done }}" hint-placeholder-val="{{ false }}">
+          <div role="status" aria-live="polite" style="display:flex;flex-direction:column;gap:24px;">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#CCFF00;">Questionnaire received</span>
+              <h2 id="q-done" style="margin:0;font-size:clamp(28px,6vw,36px);font-weight:400;line-height:1.05;letter-spacing:-0.02em;">Thanks, {{ f.first }}. Let’s find a time.</h2>
+              <p style="margin:0;font-size:17px;line-height:1.6;color:#CCCCCC;">{{ doneBody }}</p>
+            </div>
+            <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid #262626;">
+              <sc-for list="{{ milestones }}" as="m" hint-placeholder-count="3">
+                <li style="display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid #262626;">
+                  <span aria-hidden="true" style="width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;background:{{ m.bg }};color:{{ m.fg }};border:{{ m.border }};box-sizing:border-box;">{{ m.icon }}</span>
+                  <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;font-weight:500;">{{ m.title }}</span><span style="font-size:14px;line-height:1.45;color:#A6A6A6;">{{ m.note }}</span></span>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:10px;padding:14px clamp(20px,5vw,40px) calc(14px + env(safe-area-inset-bottom));border-top:1px solid #262626;background:#0B0B0B;">
+        <sc-if value="{{ is.welcome }}" hint-placeholder-val="{{ true }}">
+          <button type="submit" style="flex:1 1 100%;height:56px;border:0;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#D9FF4D;">Start</button>
+        </sc-if>
+        <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ back }}" style="flex:1 1 120px;height:56px;border-radius:36px;background:transparent;color:#FFFFFF;border:1.5px solid #3D3D3D;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="border-color:#FFFFFF;">Previous</button>
+          <button type="submit" disabled="{{ busy }}" style="flex:2 1 200px;height:56px;border:0;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;opacity:{{ busyOpacity }};padding:0 16px;line-height:1.2" style-hover="background:#D9FF4D;">{{ nextLabel }}</button>
+        </sc-if>
+        <sc-if value="{{ is.app }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ talk }}" style="flex:1 1 200px;height:56px;border-radius:36px;background:transparent;color:#FFFFFF;border:1.5px solid #3D3D3D;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="border-color:#FFFFFF;">I’d also like to talk</button>
+          <button type="button" onClick="{{ finish }}" style="flex:1 1 200px;height:56px;border:0;border-radius:36px;background:#FFFFFF;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#E7E7EA;">Done, back to site</button>
+        </sc-if>
+        <sc-if value="{{ is.done }}" hint-placeholder-val="{{ false }}">
+          <a href="https://calendly.com/deedshare-cj/30min" target="_blank" rel="noopener" onClick="{{ openCal }}" style="flex:2 1 220px;display:flex;align-items:center;justify-content:center;height:56px;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;text-decoration:none;white-space:nowrap" style-hover="background:#D9FF4D;">{{ calLabel }}</a>
+          <button type="button" onClick="{{ finish }}" style="flex:1 1 120px;height:56px;border-radius:36px;background:transparent;color:#FFFFFF;border:1.5px solid #3D3D3D;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="border-color:#FFFFFF;">Close</button>
+        </sc-if>
+      </div>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:600,&quot;height&quot;:800},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;demoOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const ROLES = ['Potential App User','Potential Investor','Potential Team Member','Potential Strategic Partner'];
+const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','Washington, D.C.','Puerto Rico','International'];
+const EXPERTISE = ['Real Estate','Investing / Venture Capital','Finance / Banking','Private Equity','Legal','Insurance','Technology','AI / Software','Product / UX Design','Marketing / Branding','Content Creation / Media','Sales / Business Development','Operations / Strategy','Recruiting / Talent','Executive Leadership','Entrepreneurship / Startups','Construction / Development','Architecture / Interior Design','Healthcare','Education','Government / Public Sector','Hospitality','Ecommerce','Manufacturing / Logistics','Trades / Skilled Labor','Community / Nonprofit','Student','Other'];
+const AFFIL = ['Founder','Executive','Investor','Employee','Freelance / Independent','Company Representative','Student','Other'];
+const BLANK = { role:'', first:'', last:'', phone:'', email:'', state:'', expertise:'', company:'', affiliation:'' };
+const APP = ROLES[0];
+
+class Component extends DCLogic {
+  state = { step:'welcome', f:{...BLANK}, err:{}, talk:false, status:'idle', attempts:0, calOpened:false, joined:false, wide:true, subId:null };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ wide: window.innerWidth >= 768 });
+    this.onResize(); window.addEventListener('resize', this.onResize);
+  }
+  componentDidUpdate(prev) {
+    if (!prev.open && this.props.open) this.lastFocus = document.activeElement;
+    if (prev.open && !this.props.open && this.lastFocus && this.lastFocus.focus) this.lastFocus.focus({ preventScroll:true });
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearTimeout(this.t); }
+
+  flow() {
+    const { f, talk } = this.state;
+    if (f.role === APP) return talk ? ['role','app','name','contact','background','company'] : ['role','app'];
+    return ['role','name','contact','background','company'];
+  }
+
+  set(k, v) { this.setState(s => ({ f:{...s.f, [k]:v}, err:{...s.err, [k]:''}, subId: null })); }
+
+  check(step) {
+    const f = this.state.f, e = {};
+    if (step === 'role' && !f.role) e.role = 'Choose the option that fits best.';
+    if (step === 'name') { if (!f.first.trim()) e.first = 'Enter your first name.'; if (!f.last.trim()) e.last = 'Enter your last name.'; }
+    if (step === 'contact') {
+      if (!f.email.trim()) e.email = 'Enter your email.';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) e.email = 'That email doesn’t look right.';
+      const d = f.phone.replace(/\D/g, '');
+      if (f.phone.trim() && (d.length < 7 || d.length > 15)) e.phone = 'Enter a valid phone number, or leave it blank.';
+    }
+    return e;
+  }
+
+  next = (ev) => {
+    ev && ev.preventDefault();
+    const { step } = this.state;
+    if (step === 'welcome') { this.setState({ step:'role' }); return; }
+    if (step === 'done' || step === 'app') return;
+    const err = this.check(step);
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    const fl = this.flow(), i = fl.indexOf(step);
+    if (step === 'company') { this.submit(); return; }
+    this.setState({ step: fl[i + 1], err:{} });
+  };
+
+  submit() {
+    if (this.state.status === 'submitting') return;
+    const subId = this.state.subId || ('sub_' + Math.random().toString(36).slice(2, 10));
+    this.setState(s => ({ status:'submitting', attempts: s.attempts + 1, subId }));
+    this.t = setTimeout(() => {
+      const failNow = (this.props.demoOutcome ?? 'success') === 'fail' && this.state.attempts === 1;
+      if (failNow) this.setState({ status:'error' });
+      else this.setState({ status:'idle', step:'done' });
+    }, 1200);
+  }
+
+  back = () => {
+    const { step } = this.state;
+    if (step === 'role') { this.setState({ step:'welcome', err:{} }); return; }
+    const fl = this.flow(), i = fl.indexOf(step);
+    if (i > 0) this.setState({ step: fl[i - 1], err:{}, talk: fl[i - 1] === 'app' ? false : this.state.talk, status:'idle' });
+  };
+
+  reset() { clearTimeout(this.t); this.setState({ step:'welcome', f:{...BLANK}, err:{}, talk:false, status:'idle', attempts:0, calOpened:false, joined:false, subId:null }); }
+
+  close = () => { this.props.onClose && this.props.onClose(); };
+  finish = () => { this.reset(); this.close(); };
+
+  renderVals() {
+    const { step, f, err, status, wide, calOpened, joined } = this.state;
+    const fl = this.flow();
+    const idx = fl.indexOf(step);
+    const inFlow = idx >= 0;
+    const h = {};
+    Object.keys(BLANK).forEach(k => h[k] = e => this.set(k, e.target.value));
+    const bd = {}, inv = {};
+    ['first','last','email','phone'].forEach(k => { bd[k] = err[k] ? '#FF8A7A' : '#333333'; inv[k] = !!err[k]; });
+    const is = {}; ['welcome','role','app','name','contact','background','company','done'].forEach(k => is[k] = step === k);
+    const busy = status === 'submitting';
+    const ms = (icon, title, note, on) => ({ icon, title, note, bg: on ? '#CCFF00' : 'transparent', fg: on ? '#000000' : '#A6A6A6', border: on ? '0' : '1.5px solid #3D3D3D' });
+    return {
+      display: (this.props.open ?? true) ? 'flex' : 'none',
+      maxW: wide ? '600px' : '100%',
+      panelH: wide ? 'auto' : '100%',
+      maxH: wide ? 'min(760px, calc(100dvh - 64px))' : '100dvh',
+      radius: wide ? '24px' : '0',
+      titleId: 'q-' + step,
+      is, f, h, err: { role:'', first:'', last:'', email:'', phone:'', ...err }, bd, inv,
+      canBack: step !== 'welcome' && step !== 'done', noBack: step === 'welcome' || step === 'done',
+      showNav: inFlow && step !== 'app',
+      progressLabel: step === 'welcome' ? 'Get connected' : step === 'done' ? 'Submitted' : `Step ${idx + 1} of ${fl.length}`,
+      progressPct: step === 'welcome' ? '0%' : step === 'done' ? '100%' : Math.round(((idx + 1) / fl.length) * 100) + '%',
+      roles: ROLES.map(label => {
+        const on = f.role === label;
+        return { label, on, bg: on ? '#1F1A08' : '#141414', border: on ? '#CCFF00' : (err.role ? '#FF8A7A' : '#2B2B2B'), dot: on ? '7px solid #CCFF00' : '1.5px solid #4D4D4D',
+          pick: () => this.setState(s => ({ f:{...s.f, role:label}, err:{}, talk:false })) };
+      }),
+      states: STATES, expertise: EXPERTISE, affiliations: AFFIL,
+      failed: status === 'error',
+      busy, busyOpacity: busy ? 0.7 : 1,
+      nextLabel: step === 'company' ? (busy ? 'Submitting…' : status === 'error' ? 'Try again' : 'Submit & continue to booking') : 'Next',
+      next: this.next, back: this.back, close: this.close, finish: this.finish,
+      talk: () => this.setState({ talk:true, step:'name' }),
+      joined, markJoined: () => this.setState({ joined:true }),
+      openCal: () => this.setState({ calOpened:true }),
+      calLabel: calOpened ? 'Reopen calendar ↗' : 'Continue to booking ↗',
+      doneBody: calOpened ? 'Calendly opened in a new tab. Your meeting is set once you pick a time there and get Calendly’s confirmation email.' : 'Your answers are in. Pick a 30-minute slot on my calendar next. Nothing is booked until you choose a time.',
+      milestones: [
+        ms('✓', 'Questionnaire submitted', 'I’ve received your answers.', true),
+        ms(calOpened ? '✓' : '2', 'Calendar opened', calOpened ? 'Opened in a new tab.' : 'Continue to booking to choose a time.', calOpened),
+        ms('3', 'Meeting booked', 'Confirmed by Calendly by email after you pick a time.', false),
+      ],
+      onKey: (e) => { if (e.key === 'Escape') this.close(); },
+    };
+  }
+}
+</script>
+</body>
+</html>

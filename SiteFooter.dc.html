@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"></helmet>
+<footer style="background:#000000;color:#FFFFFF;font-family:'Inter',system-ui,sans-serif;padding:clamp(48px,7vw,96px) clamp(20px,5vw,64px) calc(28px + env(safe-area-inset-bottom));border-top:1px solid #262626;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,6vw,72px);">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:40px clamp(24px,4vw,56px);align-items:start;">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+        <nav aria-label="{{ g.title }}" style="display:flex;flex-direction:column;">
+          <h2 style="margin:0;padding-bottom:16px;border-bottom:1px solid #333333;font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#CCFF00;">{{ g.title }}</h2>
+          <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="3">
+            <sc-if value="{{ i.isLink }}" hint-placeholder-val="{{ true }}">
+              <a href="{{ i.href }}" target="{{ i.target }}" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:12px 0;border-bottom:1px solid #1F1F1F;font-size:18px;font-weight:500;color:#FFFFFF;" style-hover="color:#CCFF00;">
+                <span style="display:flex;flex-direction:column;gap:2px;"><span>{{ i.label }}</span><span style="font-size:12px;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:#8F8F8F;">{{ i.note }}</span></span>
+                <span aria-hidden="true" style="font-size:15px;color:#6E6E6E;">{{ i.icon }}</span>
+              </a>
+            </sc-if>
+            <sc-if value="{{ i.isButton }}" hint-placeholder-val="{{ false }}">
+              <button type="button" onClick="{{ i.onClick }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:60px;padding:12px 0;border:0;border-bottom:1px solid #1F1F1F;background:none;font-size:18px;font-weight:500;color:#FFFFFF;text-align:left;cursor:pointer;" style-hover="color:#CCFF00;">
+                <span style="display:flex;flex-direction:column;gap:2px;"><span>{{ i.label }}</span><span style="font-size:12px;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:#8F8F8F;">{{ i.note }}</span></span>
+                <span aria-hidden="true" style="font-size:15px;color:#6E6E6E;">{{ i.icon }}</span>
+              </button>
+            </sc-if>
+            <sc-if value="{{ i.isPending }}" hint-placeholder-val="{{ false }}">
+              <div aria-disabled="true" style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:12px 0;border-bottom:1px solid #1F1F1F;font-size:18px;font-weight:500;color:#6E6E6E;">
+                <span>{{ i.label }}</span>
+                <span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;">Soon</span>
+              </div>
+            </sc-if>
+          </sc-for>
+        </nav>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;font-size:14px;color:#8F8F8F;">
+      <a href="Home.dc.html" aria-label="Neil Creative home" style="display:flex;gap:5px;font-size:14px;font-weight:500;letter-spacing:0.14em;color:#FFFFFF;min-height:44px;align-items:center;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></a>
+      <span>© 2026 Neil Creative · Christian Neil Jones</span>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:760},&quot;onConnect&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onSubscribe&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;instagramUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const ext = (label, href, note) => ({ label, href, note: note || '', target:'_blank', icon:'↗', isLink:true });
+    const page = (label, href, note) => ({ label, href, note: note || '', target:'_self', icon:'→', isLink:true });
+    const act = (label, fn, fallback, note) => fn ? { label, note: note || '', onClick: fn, icon:'→', isButton:true } : page(label, fallback, note);
+    const pending = (label) => ({ label, isPending:true });
+    const ig = (this.props.instagramUrl ?? '').trim();
+    const email = (this.props.contactEmail ?? '').trim();
+    return { groups: [
+      { title:'Read', items:[ page('Notes From Your Chief of Staff', 'Writing.dc.html'), ext('Substack', 'https://thechrisneil.substack.com/'), act('Get my next piece', this.props.onSubscribe, 'Writing.dc.html#subscribe', 'Email or text') ] },
+      { title:'Follow', items:[ ext('LinkedIn', 'https://www.linkedin.com/in/christian-neil-jones/'), ig ? ext('Instagram: DeedShare', ig) : pending('Instagram: DeedShare') ] },
+      { title:'Main mission', items:[ ext('DeedShare', 'https://join.mydeedshare.com/') ] },
+      { title:'Side missions', items:[ ext('Pynding', 'https://pynding-app.vercel.app/promo'), ext('DeedShare Labs', 'https://labs.mydeedshare.com/') ] },
+      { title:'Say hi', items:[ act('Get connected', this.props.onConnect, 'Home.dc.html#get-connected', 'Before we meet'), page('Digital card', 'Card.dc.html'), email ? ext(email, 'mailto:' + email) : pending('Email') ] },
+    ] };
+  }
+}
+</script>
+</body>
+</html>

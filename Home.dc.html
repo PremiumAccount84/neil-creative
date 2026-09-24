@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000000;color:#FFFFFF;-webkit-text-size-adjust:100%}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+input,select,button{font:inherit}
+:focus-visible{outline:3px solid #CCFF00;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;height:100dvh;font-family:'Inter',system-ui,sans-serif;">
+  <header style="position:absolute;top:0;left:0;right:0;z-index:40;padding:env(safe-area-inset-top) clamp(20px,5vw,64px) 0;background:{{ hdr.bg }};color:{{ hdr.fg }};transition:background 240ms ease,color 240ms ease;">
+    <div style="max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <button type="button" onClick="{{ goTop }}" aria-label="Neil Creative, back to top" style="display:flex;gap:5px;align-items:center;min-height:44px;background:none;border:0;padding:0;color:inherit;font-size:14px;font-weight:500;letter-spacing:0.14em;cursor:pointer;"><span>NEIL</span><span style="color:{{ hdr.mark }};">CREATIVE</span></button>
+      <nav aria-label="Primary" style="display:flex;align-items:center;gap:2px;">
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ goWork }}" style="min-height:44px;padding:0 14px;border:0;background:none;color:inherit;font-size:15px;font-weight:500;cursor:pointer;opacity:0.8;;white-space:nowrap" style-hover="opacity:1;">Work</button>
+          <a href="Writing.dc.html" style="min-height:44px;padding:0 14px;display:flex;align-items:center;font-size:15px;font-weight:500;opacity:0.8;" style-hover="opacity:1;">Writing</a>
+          <a href="Card.dc.html" style="min-height:44px;padding:0 14px;display:flex;align-items:center;font-size:15px;font-weight:500;opacity:0.8;" style-hover="opacity:1;">Card</a>
+        </sc-if>
+        <button type="button" onClick="{{ openQ }}" style="height:40px;padding:0 16px;margin-left:8px;border:0;border-radius:36px;background:{{ hdr.btnBg }};color:{{ hdr.btnFg }};font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap">Get connected</button>
+      </nav>
+    </div>
+  </header>
+
+  <nav aria-label="Sections" style="position:absolute;right:clamp(4px,1.2vw,20px);top:50%;transform:translateY(-50%);z-index:41;display:flex;flex-direction:column;align-items:center;">
+    <sc-for list="{{ dots }}" as="d" hint-placeholder-count="11">
+      <button type="button" onClick="{{ d.go }}" aria-label="{{ d.label }}" aria-current="{{ d.current }}" title="{{ d.label }}" style="width:24px;height:24px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+        <span style="display:block;width:5px;height:{{ d.h }};border-radius:999px;background:{{ d.c }};transition:height 200ms ease,background 200ms ease;"></span>
+      </button>
+    </sc-for>
+  </nav>
+
+  <main ref="{{ scrollRef }}" tabIndex="-1" style="height:100dvh;overflow-y:{{ ov }};overflow-x:hidden;scroll-snap-type:{{ snap }};scroll-behavior:{{ sb }};overscroll-behavior-y:contain;outline:none;">
+
+    <section data-snap="0" data-screen-label="01 Introduction" aria-label="Introduction" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:{{ cols2 }};gap:clamp(20px,5vw,72px);align-items:center;">
+        <div style="order:{{ imgOrder }};border-radius:20px;overflow:hidden;height:{{ heroImgH }};background:#1A1A1A;">
+          <img src="assets/cj-lounge.png" alt="Christian Neil Jones seated on a sofa, smiling" style="width:100%;height:100%;object-fit:cover;object-position:70% 28%;display:block;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:clamp(14px,2vw,24px);">
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <span style="font-size:15px;font-weight:500;">Christian Neil Jones</span>
+            <span style="font-size:14px;color:#A6A6A6;">Business Strategist / Chief of Staff</span>
+          </div>
+          <h1 style="margin:0;font-weight:400;font-size:clamp(38px,5.6vw,80px);line-height:0.94;letter-spacing:-0.025em;text-wrap:balance;">Build Systems That <span style="color:#CCFF00;">Scale Human Potential</span></h1>
+          <p style="margin:0;max-width:38ch;font-size:clamp(16px,1.4vw,19px);line-height:1.5;color:#CCCCCC;text-wrap:pretty;">Applying an engineering mindset to business, leadership, &amp; human behavior.</p>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;padding-top:6px;">
+            <button type="button" onClick="{{ openQ }}" style="flex:0 1 auto;height:52px;padding:0 26px;border:0;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#D9FF4D;">Get connected</button>
+            <button type="button" onClick="{{ goNotes }}" style="min-height:44px;padding:0;border:0;background:none;color:#FFFFFF;font-size:15px;font-weight:500;cursor:pointer;border-bottom:1px solid #6E6E6E;;white-space:nowrap" style-hover="border-color:#FFFFFF;">Read My Notes ↓</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-snap="1" data-screen-label="02 My focus" aria-labelledby="h-focus" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+        <h2 id="h-focus" style="margin:0;font-size:14px;font-weight:500;color:#A6A6A6;">Founder Perspective</h2>
+        <p style="margin:0;font-weight:400;font-size:clamp(30px,4.4vw,58px);line-height:1.12;letter-spacing:-0.02em;text-wrap:pretty;">Rather than chasing trends, my focus is building <em style="box-shadow:inset 0 -0.16em 0 #CCFF00;">business</em> systems that fundamentally change how people coordinate, execute, and participate at scale.</p>
+      </div>
+    </section>
+
+    <section data-snap="2" data-screen-label="03 My approach" aria-labelledby="h-approach" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:{{ cols2 }};gap:clamp(24px,5vw,72px);align-items:center;">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <h2 id="h-approach" style="margin:0;font-size:14px;font-weight:500;color:#A6A6A6;">How I approach it</h2>
+          <p style="margin:0;font-weight:400;font-size:clamp(24px,2.8vw,36px);line-height:1.2;letter-spacing:-0.015em;text-wrap:pretty;">My work has always focused on transforming fragmented industries into scalable operating systems by combining:</p>
+        </div>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;">
+          <li style="display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:14px;min-height:64px;padding:12px 16px 12px 12px;border-radius:16px;background:#111111;border:1px solid #262626;"><span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:#000000;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;">01</span><span style="font-size:18px;font-weight:500;">Operational clarity</span></li>
+          <li style="display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:14px;min-height:64px;padding:12px 16px 12px 12px;border-radius:16px;background:#111111;border:1px solid #262626;"><span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:#000000;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;">02</span><span style="font-size:18px;font-weight:500;">Behavioral psychology</span></li>
+          <li style="display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:14px;min-height:64px;padding:12px 16px 12px 12px;border-radius:16px;background:#111111;border:1px solid #262626;"><span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:#000000;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;">03</span><span style="font-size:18px;font-weight:500;">Infrastructure-first thinking</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section data-snap="3" data-screen-label="04 Why systems" aria-labelledby="h-why" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+        <h2 id="h-why" style="margin:0;font-size:16px;font-weight:500;line-height:1.4;">My philosophy is rooted in a simple belief:</h2>
+        <p style="margin:0;font-weight:400;font-size:clamp(30px,4.4vw,58px);line-height:1.12;letter-spacing:-0.02em;text-wrap:pretty;">Most businesses do not fail because people lack effort. <span style="">They fail because they lack systems.</span></p>
+      </div>
+    </section>
+
+    <section data-snap="4" data-screen-label="05 Core question" aria-labelledby="h-core" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+        <h2 id="h-core" style="margin:0;font-size:14px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#CCFF00;">Core question</h2>
+        <p style="margin:0;font-weight:400;font-size:clamp(34px,5vw,68px);line-height:1.06;letter-spacing:-0.025em;text-wrap:balance;">How do you replicate your successes &amp; <span style="color:#CCFF00;">permanently fix your failures?</span></p>
+      </div>
+    </section>
+
+    <section data-snap="5" data-screen-label="06 Philosophy" aria-labelledby="h-philo" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));background:#CCFF00;color:#110E08;">
+      <div style="width:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+        <h2 id="h-philo" style="margin:0;font-size:14px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Philosophy</h2>
+        <p style="margin:0;font-weight:400;font-size:clamp(34px,5vw,68px);line-height:1.06;letter-spacing:-0.025em;text-wrap:balance;">A great brand is <em>not</em> built on more effort. It’s built on great systems.</p>
+      </div>
+    </section>
+
+    <section id="notes" data-snap="6" data-screen-label="07 Notes" aria-labelledby="h-writing" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <h2 id="h-writing" style="margin:0;font-weight:500;font-size:clamp(28px,3.4vw,44px);line-height:1.1;letter-spacing:-0.02em;text-wrap:balance;">Notes From Your Chief of Staff</h2>
+          <blockquote style="margin:0;padding:2px 0 2px 14px;border-left:3px solid #CCFF00;font-size:17px;font-style:italic;font-weight:500;">“Clarity Breeds Confidence”</blockquote>
+          <p style="margin:0;max-width:52ch;font-size:16px;line-height:1.5;color:#CCCCCC;text-wrap:pretty;">Here are short notes that I will be sharing for clearer thinking, better decisions, and moving forward with your business.</p>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;">
+            <span style="font-size:15px;font-style:italic;font-weight:500;">By Christian Jones</span>
+            <a href="Writing.dc.html" style="display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;border-bottom:1px solid #4D4D4D;white-space:nowrap;" style-hover="border-color:#FFFFFF;">View all writing</a>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ articles }}" as="a" hint-placeholder-count="3">
+            <a href="{{ a.url }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:16px;padding:18px 20px;border-radius:18px;background:#111111;border:1px solid {{ a.border }};color:#FFFFFF;" style-hover="background:#1A1A1A;color:#FFFFFF;">
+              <span style="display:flex;flex-direction:column;gap:6px;min-width:0;">
+                <span style="font-size:13px;color:{{ a.metaColor }};">{{ a.meta }}</span>
+                <span style="font-size:clamp(18px,2vw,22px);font-weight:500;line-height:1.25;letter-spacing:-0.01em;text-wrap:balance;">{{ a.title }}</span>
+                <span style="font-size:15px;line-height:1.5;color:#CCCCCC;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ a.excerpt }}</span>
+              </span>
+              <span aria-hidden="true" style="color:#A6A6A6;">↗</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" data-snap="7" data-screen-label="08 Main Mission" aria-labelledby="h-build" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:{{ cols2 }};gap:clamp(20px,5vw,64px);align-items:center;">
+        <img src="assets/deedshare.png" alt="DeedShare app icon on a phone home screen" style="width:100%;height:{{ workImgH }};object-fit:cover;object-position:62% 42%;border-radius:20px;display:block;">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <h2 id="h-build" style="margin:0;font-size:14px;font-weight:500;color:#A6A6A6;">Main Mission</h2>
+          <h3 style="margin:0;font-weight:500;font-size:clamp(34px,4vw,52px);line-height:1;letter-spacing:-0.02em;">DeedShare</h3>
+          <p style="margin:0;max-width:36ch;font-size:17px;line-height:1.5;color:#CCCCCC;">Building a simpler, more accessible path to real estate investing.</p>
+          <a href="https://join.mydeedshare.com/" target="_blank" rel="noopener" style="align-self:flex-start;display:flex;align-items:center;height:52px;padding:0 24px;margin-top:6px;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;white-space:nowrap" style-hover="background:#D9FF4D;color:#110E08;">Explore DeedShare ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section data-snap="8" data-screen-label="09 Side missions" aria-labelledby="h-side" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+        <h2 id="h-side" style="margin:0 0 4px;font-weight:400;font-size:clamp(28px,3.4vw,44px);line-height:1.1;letter-spacing:-0.02em;">Things I’ve built <span style="color:#A6A6A6;">/ Side missions</span></h2>
+        <div style="display:grid;grid-template-columns:{{ cols2 }};gap:10px;">
+          <article style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#111111;border:1px solid #262626;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span aria-hidden="true" style="flex:0 0 auto;width:40px;height:40px;border-radius:10px;background:#000000;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:20px;">P</span>
+              <h3 style="margin:0;font-size:19px;font-weight:500;">Pynding</h3>
+            </div>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:#CCCCCC;">A virtual accelerator helping local business owners prepare, strengthen, and scale their businesses.</p>
+            <a href="https://pynding-app.vercel.app/promo" target="_blank" rel="noopener" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;" style-hover="text-decoration:underline;">Explore Pynding ↗</a>
+          </article>
+          <article style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#111111;border:1px solid #262626;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span aria-hidden="true" style="flex:0 0 auto;width:40px;height:40px;border-radius:10px;background:#CCFF00;color:#110E08;display:flex;align-items:center;justify-content:center;font-size:20px;">L</span>
+              <div style="display:flex;flex-direction:column;"><h3 style="margin:0;font-size:19px;font-weight:500;">DeedShare Labs</h3><span style="font-size:13px;color:#A6A6A6;">A DeedShare initiative</span></div>
+            </div>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:#CCCCCC;">A contributor network bringing together experts across real estate, fintech, AI, and product to make real estate ownership more accessible.</p>
+            <a href="https://labs.mydeedshare.com/" target="_blank" rel="noopener" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;" style-hover="text-decoration:underline;">Explore DeedShare Labs ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section data-snap="9" data-screen-label="10 Subscribe" aria-labelledby="h-subscribe" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:{{ subCols }};gap:clamp(20px,5vw,72px);align-items:center;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#CCFF00;">Never miss a note</span>
+          <h2 id="h-subscribe" style="margin:0;font-size:clamp(34px,5.4vw,72px);font-weight:400;line-height:1;letter-spacing:-0.03em;">Get my next piece.</h2>
+          <p style="margin:0;max-width:40ch;font-size:clamp(16px,1.5vw,20px);line-height:1.5;color:#CCCCCC;">New writing on business, leadership, and systems. Get notified when I publish.</p>
+        </div>
+        <div style="padding:clamp(18px,3vw,32px);border-radius:24px;background:#111111;border:1px solid #262626;">
+          <dc-import name="Subscribe" demo-outcome="{{ demoS }}" hint-size="100%,480px"></dc-import>
+        </div>
+      </div>
+    </section>
+
+    <section data-snap="10" data-screen-label="11 Connect" aria-labelledby="h-connect" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(20px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
+      <div style="width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:16px;flex:1 1 auto;justify-content:center;">
+        <h2 id="h-connect" style="margin:0 0 4px;font-weight:400;font-size:clamp(30px,3.6vw,48px);line-height:1.08;letter-spacing:-0.02em;">Connect with intention.</h2>
+        <div style="display:grid;grid-template-columns:{{ cols2 }};gap:8px;">
+          <button type="button" onClick="{{ openQ }}" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:12px;min-height:76px;padding:14px 18px;border-radius:18px;border:0;background:#CCFF00;color:#110E08;text-align:left;cursor:pointer;" style-hover="background:#D9FF4D;">
+            <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;">Get connected</span><span style="font-size:14px;line-height:1.4;">Introduce yourself and explore opportunities to work together.</span></span><span aria-hidden="true">→</span>
+          </button>
+          <a href="https://www.linkedin.com/in/christian-neil-jones/" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:12px;min-height:76px;padding:14px 18px;border-radius:18px;background:#111111;border:1px solid #262626;color:#FFFFFF;" style-hover="background:#1A1A1A;">
+            <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;">Connect on LinkedIn</span><span style="font-size:14px;line-height:1.4;color:#A6A6A6;">Stay connected professionally.</span></span><span aria-hidden="true" style="color:#A6A6A6;">↗</span>
+          </a>
+          <a href="https://join.mydeedshare.com/" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:12px;min-height:76px;padding:14px 18px;border-radius:18px;background:#111111;border:1px solid #262626;color:#FFFFFF;" style-hover="background:#1A1A1A;">
+            <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;">Explore DeedShare</span><span style="font-size:14px;line-height:1.4;color:#A6A6A6;">Learn about the venture.</span></span><span aria-hidden="true" style="color:#A6A6A6;">↗</span>
+          </a>
+          <button type="button" onClick="{{ subEmail }}" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:12px;min-height:76px;padding:14px 18px;border-radius:18px;border:1px solid #262626;background:#111111;color:#FFFFFF;text-align:left;cursor:pointer;" style-hover="background:#1A1A1A;">
+            <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;">Get new writing</span><span style="font-size:14px;line-height:1.4;color:#A6A6A6;">Receive publication notifications.</span></span><span aria-hidden="true" style="color:#A6A6A6;">+</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+    <div data-screen-label="12 Footer" style="scroll-snap-align:end;">
+      <dc-import name="SiteFooter" on-connect="{{ openQ }}" on-subscribe="{{ subEmail }}" hint-size="100%,760px"></dc-import>
+    </div>
+  </main>
+
+  <dc-import name="Questionnaire" open="{{ qOpen }}" on-close="{{ closeQ }}" demo-outcome="{{ demoQ }}" hint-size="0,0"></dc-import>
+  <dc-import name="Subscribe" modal="{{ true }}" open="{{ sOpen }}" initial-channel="{{ subChannel }}" on-close="{{ closeSub }}" demo-outcome="{{ demoS }}" hint-size="0,0"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;demoQuestionnaire&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype outcomes&quot;},&quot;demoSubscribe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype outcomes&quot;}}">
+const SECTIONS = [
+  ['Introduction','dark'],['My focus','light'],['How I approach it','light'],['Why systems','white'],['Core question','dark'],['Philosophy','gold'],
+  ['Notes','white'],['Main Mission','dark'],['Side missions','light'],['Subscribe','dark'],['Connect','light'],
+];
+const HDR = {
+  dark:  { bg:'#000000', fg:'#FFFFFF', mark:'#CCFF00', btnBg:'#FFFFFF', btnFg:'#110E08', dot:'rgba(255,255,255,0.45)', dotOn:'#CCFF00' },
+  light: { bg:'#000000', fg:'#FFFFFF', mark:'#CCFF00', btnBg:'#FFFFFF', btnFg:'#110E08', dot:'rgba(255,255,255,0.45)', dotOn:'#CCFF00' },
+  white: { bg:'#000000', fg:'#FFFFFF', mark:'#CCFF00', btnBg:'#FFFFFF', btnFg:'#110E08', dot:'rgba(255,255,255,0.45)', dotOn:'#CCFF00' },
+  gold:  { bg:'#CCFF00', fg:'#110E08', mark:'#110E08', btnBg:'#000000', btnFg:'#FFFFFF', dot:'rgba(10,10,10,0.3)', dotOn:'#110E08' },
+};
+const FEATURED = {
+  title: 'The Best Leaders Make Themselves Less Necessary',
+  date: 'Sep 23, 2026', iso: '2026-09-23',
+  excerpt: 'Yesterday I sat down with the GM of a coffee shop and asked him a question: what’s the common denominator behind a successful business operation?',
+  url: 'https://thechrisneil.substack.com/p/the-best-leaders-make-themselves',
+};
+
+class Component extends DCLogic {
+  state = { active:0, qOpen:false, sOpen:false, subChannel:'email', wide:true, reduce:false };
+  scrollRef = React.createRef();
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ wide: window.innerWidth >= 900 });
+    this.onResize(); window.addEventListener('resize', this.onResize);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.setState({ reduce: mq.matches });
+    this.observe();
+    const hash = (location.hash || '').replace('#', '');
+    if (hash === 'get-connected') this.setState({ qOpen:true });
+  }
+  componentDidUpdate() { if (!this.io) this.observe(); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); this.io && this.io.disconnect(); }
+
+  observe() {
+    const root = this.scrollRef.current; if (!root) return;
+    const secs = root.querySelectorAll('[data-snap]'); if (secs.length < SECTIONS.length) return;
+    this.io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) this.setState({ active: +en.target.dataset.snap }); });
+    }, { root, threshold: 0, rootMargin: '-50% 0px -50% 0px' });
+    secs.forEach(s => this.io.observe(s));
+  }
+
+  go(i) {
+    const root = this.scrollRef.current; if (!root) return;
+    const el = root.querySelector(`[data-snap="${i}"]`); if (!el) return;
+    root.scrollTo({ top: el.offsetTop, behavior: this.state.reduce ? 'auto' : 'smooth' });
+  }
+
+  renderVals() {
+    const { active, qOpen, sOpen, wide, reduce, subChannel } = this.state;
+    const formOpen = qOpen || sOpen;
+    const hdr = HDR[SECTIONS[active][1]];
+    const openSub = ch => () => this.setState({ sOpen:true, subChannel:ch });
+    return {
+      scrollRef: this.scrollRef, wide, hdr,
+      subCols: wide ? 'minmax(0,1fr) minmax(0,480px)' : 'minmax(0,1fr)',
+      ov: formOpen ? 'hidden' : 'auto',
+      snap: formOpen ? 'none' : 'y mandatory',
+      sb: reduce ? 'auto' : 'smooth',
+      cols2: wide ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      imgOrder: wide ? 2 : 0,
+      heroImgH: wide ? 'min(72dvh, 680px)' : 'clamp(180px, 30dvh, 300px)',
+      workImgH: wide ? 'min(64dvh, 560px)' : 'clamp(200px, 34dvh, 340px)',
+      dots: SECTIONS.map(([label], i) => ({ label, current: i === active ? 'true' : undefined, h: i === active ? '18px' : '5px', c: i === active ? hdr.dotOn : hdr.dot, go: () => this.go(i) })),
+      goTop: () => this.go(0), goWork: () => this.go(7), goNotes: () => this.go(6),
+      featured: FEATURED,
+      articles: [
+        { ...FEATURED, meta: 'Latest · ' + FEATURED.date, metaColor: '#CCFF00', border: '#CCFF00' },
+        { title: 'The Product Is Not the Advantage. The Operating System Is.', excerpt: '', url: 'https://thechrisneil.substack.com/p/the-product-is-not-the-advantage', meta: 'Substack', metaColor: '#A6A6A6', border: '#262626' },
+        { title: 'Stop Building for Vibes. Build to Understand.', excerpt: '', url: 'https://thechrisneil.substack.com/p/stop-building-for-vibes-build-to', meta: 'Substack', metaColor: '#A6A6A6', border: '#262626' },
+      ],
+      qOpen, sOpen, subChannel,
+      openQ: () => this.setState({ qOpen:true }), closeQ: () => this.setState({ qOpen:false }),
+      subEmail: openSub('email'), subText: openSub('text'), subBoth: openSub('both'),
+      closeSub: () => this.setState({ sOpen:false }),
+      demoQ: this.props.demoQuestionnaire ?? 'success',
+      demoS: this.props.demoSubscribe ?? 'success',
+    };
+  }
+}
+</script>
+</body>
+</html>

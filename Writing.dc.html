@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000000;color:#FFFFFF;-webkit-text-size-adjust:100%}
+a{color:#FFFFFF;text-decoration:none}
+a:hover{color:#FFFFFF}
+input,select,button{font:inherit}
+:focus-visible{outline:3px solid #CCFF00;outline-offset:2px}
+@keyframes nc-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div data-screen-label="Writing" onKeyDown="{{ onKey }}" style="position:relative;height:100dvh;font-family:'Inter',system-ui,sans-serif;">
+
+  <header style="position:absolute;top:0;left:0;right:0;z-index:30;padding:env(safe-area-inset-top) clamp(16px,4vw,40px) 0;background:linear-gradient(#000000 55%, rgba(0,0,0,0));pointer-events:none;">
+    <div style="max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;pointer-events:auto;">
+      <a href="Home.dc.html" aria-label="Neil Creative home" style="display:flex;gap:5px;align-items:center;min-height:44px;font-size:14px;font-weight:500;letter-spacing:0.14em;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></a>
+      <a href="Home.dc.html" style="display:flex;align-items:center;min-height:44px;padding:0 4px;font-size:15px;font-weight:500;color:#CCCCCC;white-space:nowrap;" style-hover="color:#FFFFFF;">← Home</a>
+    </div>
+    <div aria-hidden="true" style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat({{ segCount }},minmax(0,1fr));gap:4px;">
+      <sc-for list="{{ segs }}" as="g" hint-placeholder-count="5">
+        <span style="height:3px;border-radius:3px;background:{{ g.c }};transition:background 200ms ease;"></span>
+      </sc-for>
+    </div>
+  </header>
+
+  <sc-if value="{{ refreshFailed }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:absolute;top:calc(84px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:31;display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:8px 8px 8px 16px;border-radius:36px;background:#1A1A1A;border:1px solid #333333;font-size:14px;color:#CCCCCC;">
+      <span>Showing saved notes. Couldn’t check for new ones.</span>
+      <button type="button" onClick="{{ retry }}" style="height:36px;padding:0 14px;border-radius:36px;border:1px solid #4D4D4D;background:transparent;color:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;">Retry</button>
+    </div>
+  </sc-if>
+
+  <nav aria-label="Notes" style="display:{{ railDisplay }};position:absolute;right:clamp(8px,2vw,32px);bottom:calc(120px + env(safe-area-inset-bottom));z-index:30;display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <button type="button" onClick="{{ prev }}" aria-label="Previous" style="width:48px;height:48px;border-radius:36px;border:1px solid #333333;background:rgba(17,17,17,0.9);color:#FFFFFF;font-size:18px;cursor:pointer;" style-hover="border-color:#CCFF00;">↑</button>
+    <span aria-live="polite" style="font-size:13px;font-weight:500;color:#A6A6A6;">{{ counter }}</span>
+    <button type="button" onClick="{{ next }}" aria-label="Next" style="width:48px;height:48px;border-radius:36px;border:1px solid #333333;background:rgba(17,17,17,0.9);color:#FFFFFF;font-size:18px;cursor:pointer;" style-hover="border-color:#CCFF00;">↓</button>
+    <button type="button" onClick="{{ share }}" aria-label="Share this note" style="width:48px;height:48px;border-radius:36px;border:1px solid #333333;background:rgba(17,17,17,0.9);color:#FFFFFF;font-size:13px;font-weight:500;cursor:pointer;" style-hover="border-color:#CCFF00;">{{ shareLabel }}</button>
+  </nav>
+
+  <main ref="{{ feedRef }}" onScroll="{{ onScroll }}" tabIndex="-1" aria-label="Notes feed" style="height:100dvh;overflow-y:{{ ov }};overflow-x:hidden;scroll-snap-type:{{ snap }};overscroll-behavior-y:contain;outline:none;">
+    <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+      <section data-card="{{ $index }}" aria-hidden="{{ c.clone }}" style="position:relative;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:flex-end;padding:calc(96px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(40px + env(safe-area-inset-bottom));overflow:hidden;">
+        <div aria-hidden="true" style="position:absolute;top:calc(84px + env(safe-area-inset-top));left:clamp(20px,5vw,64px);font-size:clamp(120px,26vw,280px);font-weight:500;line-height:0.8;letter-spacing:-0.06em;color:#111111;">{{ c.num }}</div>
+
+        <sc-if value="{{ c.isCover }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding-right:64px;display:flex;flex-direction:column;gap:18px;">
+            <h1 style="margin:0;max-width:14ch;font-size:clamp(40px,6vw,76px);font-weight:500;line-height:0.98;letter-spacing:-0.03em;text-wrap:balance;">Notes From Your Chief of Staff</h1>
+            <blockquote style="margin:0;padding:2px 0 2px 16px;border-left:3px solid #CCFF00;font-size:clamp(18px,1.8vw,22px);font-style:italic;font-weight:500;">“Clarity Breeds Confidence”</blockquote>
+            <p style="margin:0;max-width:44ch;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:#CCCCCC;text-wrap:pretty;">Here are short notes that I will be sharing for clearer thinking, better decisions, and moving forward with your business.</p>
+            <span style="font-size:16px;font-style:italic;font-weight:500;">By Christian Jones</span>
+            <span style="display:flex;align-items:center;gap:8px;padding-top:12px;font-size:14px;color:#A6A6A6;">Swipe up to read <span aria-hidden="true" style="color:#CCFF00;">↑</span></span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ c.isArticle }}" hint-placeholder-val="{{ false }}">
+          <article style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding-right:64px;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:#A6A6A6;">
+              <span style="padding:4px 10px;border-radius:36px;border:1px solid {{ c.tagBorder }};color:{{ c.tagColor }};font-weight:500;">{{ c.tag }}</span>
+              <time dateTime="{{ c.iso }}">{{ c.date }}</time>
+            </div>
+            <h2 style="margin:0;max-width:18ch;font-size:clamp(36px,5.4vw,72px);font-weight:400;line-height:1;letter-spacing:-0.03em;text-wrap:balance;">{{ c.title }}</h2>
+            <p style="margin:0;max-width:48ch;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:#CCCCCC;text-wrap:pretty;">{{ c.excerpt }}</p>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding-top:6px;">
+              <a href="{{ c.url }}" target="_blank" rel="noopener" tabIndex="{{ c.tab }}" style="display:flex;align-items:center;height:52px;padding:0 24px;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;white-space:nowrap;" style-hover="background:#D9FF4D;color:#110E08;">Read article ↗</a>
+              <span style="font-size:14px;color:#8F8F8F;">By Christian Jones · on Substack</span>
+            </div>
+          </article>
+        </sc-if>
+
+        <sc-if value="{{ c.isSubscribe }}" hint-placeholder-val="{{ false }}">
+          <div style="position:relative;width:100%;max-width:1200px;max-height:100%;margin:0 auto;padding-right:{{ railPad }};overflow-y:auto;overscroll-behavior:contain;display:grid;grid-template-columns:{{ subCols }};gap:clamp(20px,5vw,72px);align-items:center;">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <span style="font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#CCFF00;">{{ c.kicker }}</span>
+              <h2 style="margin:0;font-size:clamp(34px,5.4vw,72px);font-weight:400;line-height:1;letter-spacing:-0.03em;">Get my next piece.</h2>
+              <p style="margin:0;max-width:40ch;font-size:clamp(16px,1.5vw,20px);line-height:1.5;color:#CCCCCC;">New writing on business, leadership, and systems. Get notified when I publish.</p>
+              <span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#A6A6A6;">{{ c.hint }} <span aria-hidden="true" style="color:#CCFF00;">{{ c.hintIcon }}</span></span>
+            </div>
+            <sc-if value="{{ c.live }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:clamp(18px,3vw,32px);border-radius:24px;background:#111111;border:1px solid #262626;">
+                <dc-import name="Subscribe" demo-outcome="{{ demoS }}" hint-size="100%,480px"></dc-import>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ c.isLoading }}" hint-placeholder-val="{{ false }}">
+          <div aria-hidden="true" style="position:relative;width:100%;max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:16px;animation:nc-pulse 1.4s ease-in-out infinite;">
+            <span style="width:140px;height:26px;border-radius:36px;background:#1A1A1A;"></span>
+            <span style="width:min(640px,88%);height:56px;border-radius:12px;background:#1A1A1A;"></span>
+            <span style="width:min(520px,70%);height:18px;border-radius:8px;background:#1A1A1A;"></span>
+            <span style="width:170px;height:52px;border-radius:36px;background:#1A1A1A;"></span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ c.isMessage }}" hint-placeholder-val="{{ false }}">
+          <div role="{{ c.role }}" style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding-right:64px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;">
+            <h2 style="margin:0;font-size:clamp(32px,4.4vw,56px);font-weight:400;line-height:1.05;letter-spacing:-0.025em;">{{ c.title }}</h2>
+            <p style="margin:0;max-width:44ch;font-size:17px;line-height:1.5;color:#CCCCCC;">{{ c.excerpt }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;">
+              <sc-if value="{{ c.canRetry }}" hint-placeholder-val="{{ false }}">
+                <button type="button" onClick="{{ retry }}" style="height:52px;padding:0 22px;border-radius:36px;border:0;background:#CCFF00;color:#110E08;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;">Try again</button>
+              </sc-if>
+              <a href="https://thechrisneil.substack.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;height:52px;padding:0 22px;border-radius:36px;border:1px solid #4D4D4D;color:#FFFFFF;font-size:15px;font-weight:500;white-space:nowrap;">Open Substack ↗</a>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-for>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;feedState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loaded&quot;,&quot;loading&quot;,&quot;empty&quot;,&quot;refresh-failed&quot;,&quot;error&quot;],&quot;default&quot;:&quot;loaded&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;sampleFeed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;actual&quot;,&quot;12 sample&quot;],&quot;default&quot;:&quot;actual&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;demoSubscribe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;}}">
+const ARTICLES = [
+  { title:'The Best Leaders Make Themselves Less Necessary', date:'Sep 23, 2026', iso:'2026-09-23',
+    excerpt:'Yesterday I sat down with the GM of a coffee shop and asked him a question: what’s the common denominator behind a successful business operation?',
+    url:'https://thechrisneil.substack.com/p/the-best-leaders-make-themselves' },
+  { title:'The Product Is Not the Advantage. The Operating System Is.', date:'', iso:'', excerpt:'',
+    url:'https://thechrisneil.substack.com/p/the-product-is-not-the-advantage' },
+  { title:'Stop Building for Vibes. Build to Understand.', date:'', iso:'', excerpt:'',
+    url:'https://thechrisneil.substack.com/p/stop-building-for-vibes-build-to' },
+];
+
+class Component extends DCLogic {
+  state = { override:null, idx:1, sOpen:false, subChannel:'email', shared:false };
+  feedRef = React.createRef();
+
+  componentDidMount() { this.init(); }
+  componentDidUpdate(prev) {
+    if (prev.feedState !== this.props.feedState || prev.sampleFeed !== this.props.sampleFeed) { this.ready = false; this.setState({ idx: 1 }); }
+    if (!this.ready) this.init();
+  }
+  init() {
+    const el = this.feedRef.current;
+    if (!el || !el.querySelector('[data-card]') || !el.clientHeight) { requestAnimationFrame(() => this.init()); return; }
+    this.ready = true;
+    const i = this.cardsWithClones().length > this.realCards().length ? 1 : 0;
+    this.jumpTo(i); if (this.state.idx !== i) this.setState({ idx: i });
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.st); clearTimeout(this.sh); }
+
+  articles() {
+    if ((this.props.sampleFeed ?? 'actual') !== '12 sample') return ARTICLES;
+    const extra = Array.from({ length: 12 - ARTICLES.length }, (_, k) => ({ title:'Sample note ' + (ARTICLES.length + k + 1) + ' (prototype placeholder)', date:'', iso:'', excerpt:'', url:'https://thechrisneil.substack.com/' }));
+    return [...ARTICLES, ...extra];
+  }
+  feed() { return this.state.override ?? this.props.feedState ?? 'loaded'; }
+
+  // real cards (without clones)
+  realCards() {
+    const f = this.feed();
+    if (f === 'loading') return [{ kind:'loading' }];
+    if (f === 'empty') return [{ kind:'cover' }, { kind:'message', title:'No notes here yet.', excerpt:'New notes appear here after they’re published on Substack.' }, { kind:'subscribe' }];
+    if (f === 'error') return [{ kind:'message', title:'Notes couldn’t load.', excerpt:'Try again, or read everything directly on Substack.', canRetry:true, role:'alert' }];
+    const list = this.articles();
+    const out = [{ kind:'cover' }];
+    list.forEach((a, i) => {
+      out.push({ kind:'article', ...a, i });
+      const n = i + 1;
+      if (list.length >= 10 && n % 5 === 0 && n < list.length) out.push({ kind:'subscribe', mid:true });
+    });
+    out.push({ kind:'subscribe' });
+    return out;
+  }
+
+  // with loop clones: [last, ...real, first]
+  cardsWithClones() {
+    const r = this.realCards();
+    if (r.length < 2) return r.map(c => ({ ...c, clone:false }));
+    return [{ ...r[r.length - 1], clone:true }, ...r.map(c => ({ ...c, clone:false })), { ...r[0], clone:true }];
+  }
+
+  jumpTo(i, smooth) {
+    const el = this.feedRef.current; if (!el) return;
+    el.scrollTo({ top: i * el.clientHeight, behavior: smooth ? 'smooth' : 'auto' });
+  }
+
+  settle = () => {
+    const el = this.feedRef.current; if (!el) return;
+    const all = this.cardsWithClones();
+    const i = Math.round(el.scrollTop / el.clientHeight);
+    if (all.length > 2 && all.length === this.realCards().length + 2) {
+      if (i === 0) { this.jumpTo(all.length - 2); this.setState({ idx: all.length - 2 }); return; }
+      if (i === all.length - 1) { this.jumpTo(1); this.setState({ idx: 1 }); return; }
+    }
+    if (i !== this.state.idx) this.setState({ idx: i });
+  };
+
+  onScroll = () => {
+    clearTimeout(this.st);
+    this.st = setTimeout(this.settle, 120);
+    const el = this.feedRef.current; if (!el) return;
+    const i = Math.round(el.scrollTop / el.clientHeight);
+    if (i !== this.state.idx) this.setState({ idx: i });
+  };
+
+  step(d) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.jumpTo(this.state.idx + d, !reduce);
+  }
+
+  renderVals() {
+    const all = this.cardsWithClones();
+    const real = this.realCards();
+    const looped = all.length === real.length + 2;
+    const { idx, sOpen, subChannel, shared } = this.state;
+    const realIdx = looped ? ((idx - 1 + real.length) % real.length) : idx;
+    const cur = real[realIdx] || real[0];
+    const articleCount = this.articles().length; const wide = typeof window !== 'undefined' && window.innerWidth >= 900;
+    const openSub = ch => () => this.setState({ sOpen:true, subChannel:ch });
+    return {
+      feedRef: this.feedRef, onScroll: this.onScroll,
+      ov: sOpen ? 'hidden' : 'auto', snap: sOpen ? 'none' : 'y mandatory',
+      refreshFailed: this.feed() === 'refresh-failed',
+      cards: all.map(c => {
+        const n = c.kind === 'article' ? String(c.i + 1).padStart(2, '0') : '';
+        return {
+          ...c, num: n, tab: c.clone ? -1 : 0, clone: c.clone ? 'true' : undefined,
+          isCover: c.kind === 'cover', isArticle: c.kind === 'article', isSubscribe: c.kind === 'subscribe',
+          isLoading: c.kind === 'loading', live: !c.clone, kicker: c.mid ? 'Enjoying these?' : 'You’re all caught up', hint: c.mid ? 'Swipe up to keep reading' : 'Swipe up to start over', hintIcon: c.mid ? '↑' : '↻', isMessage: c.kind === 'message',
+          tag: c.i === 0 ? 'Latest' : 'Note ' + n,
+          tagColor: c.i === 0 ? '#CCFF00' : '#CCCCCC', tagBorder: c.i === 0 ? '#CCFF00' : '#333333',
+          role: c.role || undefined, canRetry: !!c.canRetry,
+        };
+      }),
+      segCount: real.length, railDisplay: (cur.kind === 'subscribe' && !wide) ? 'none' : 'flex', railPad: wide ? '72px' : '0', subCols: wide ? 'minmax(0,1fr) minmax(0,480px)' : 'minmax(0,1fr)',
+      segs: real.map((_, i) => ({ c: i === realIdx ? '#CCFF00' : (i < realIdx ? '#6E6E6E' : '#262626') })),
+      counter: cur.kind === 'article' ? `${cur.i + 1} / ${articleCount}` : cur.kind === 'subscribe' ? (cur.mid ? 'Break' : 'End') : cur.kind === 'cover' ? 'Start' : '',
+      prev: () => this.step(-1), next: () => this.step(1),
+      onKey: (e) => {
+        const tag = (e.target && e.target.tagName) || '';
+        if (sOpen || /INPUT|SELECT|TEXTAREA|BUTTON/.test(tag)) return;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'j') { e.preventDefault(); this.step(1); }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'k') { e.preventDefault(); this.step(-1); }
+      },
+      shareLabel: shared ? 'Copied' : 'Share',
+      share: async () => {
+        const url = cur.kind === 'article' ? cur.url : 'https://neilcreative.com/writing';
+        try { if (navigator.share) await navigator.share({ url }); else await navigator.clipboard.writeText(url); } catch (e) {}
+        this.setState({ shared:true }); clearTimeout(this.sh); this.sh = setTimeout(() => this.setState({ shared:false }), 1600);
+      },
+      retry: () => { this.setState({ override:'loading', idx:0 }); clearTimeout(this.t); this.t = setTimeout(() => { this.setState({ override:'loaded', idx:1 }, () => this.jumpTo(1)); }, 1200); },
+      sOpen, subChannel,
+      subEmail: openSub('email'), subText: openSub('text'), subBoth: openSub('both'),
+      closeSub: () => this.setState({ sOpen:false }),
+      demoS: this.props.demoSubscribe ?? 'success',
+    };
+  }
+}
+</script>
+</body>
+</html>

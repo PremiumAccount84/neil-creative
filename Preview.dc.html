@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#141414;color:#FFFFFF}a{color:#CCFF00;text-decoration:none}a:hover{color:#D9FF4D}button{font:inherit}</style>
+</helmet>
+<div style="height:100dvh;display:flex;flex-direction:column;font-family:'Inter',system-ui,sans-serif;">
+  <div style="flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding:10px 16px;background:#000000;border-bottom:1px solid #262626;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:13px;font-weight:500;letter-spacing:0.14em;">NEIL <span style="color:#CCFF00;">CREATIVE</span></span>
+      <span style="font-size:12px;font-weight:500;padding:3px 8px;border-radius:999px;background:#262626;color:#A6A6A6;white-space:nowrap;">Demo preview</span>
+    </div>
+    <div role="tablist" aria-label="Page" style="display:flex;gap:4px;padding:4px;border-radius:999px;background:#111111;border:1px solid #262626;">
+      <sc-for list="{{ pages }}" as="p" hint-placeholder-count="3">
+        <button type="button" role="tab" aria-selected="{{ p.on }}" onClick="{{ p.pick }}" style="height:36px;padding:0 14px;border:0;border-radius:36px;background:{{ p.bg }};color:{{ p.fg }};font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;">{{ p.label }}</button>
+      </sc-for>
+    </div>
+    <div role="radiogroup" aria-label="Viewport" style="display:flex;gap:4px;padding:4px;border-radius:999px;background:#111111;border:1px solid #262626;">
+      <sc-for list="{{ views }}" as="v" hint-placeholder-count="2">
+        <button type="button" role="radio" aria-checked="{{ v.on }}" onClick="{{ v.pick }}" style="height:36px;padding:0 16px;border:0;border-radius:36px;background:{{ v.bg }};color:{{ v.fg }};font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;">{{ v.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="flex:1 1 auto;min-height:0;display:flex;justify-content:center;align-items:{{ align }};padding:{{ pad }};overflow:auto;">
+    <iframe key="{{ frameKey }}" src="{{ src }}" title="{{ title }}" style="flex:0 0 auto;width:{{ w }};height:{{ h }};max-height:100%;border:0;border-radius:{{ r }};background:#000000;box-shadow:{{ shadow }};"></iframe>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PAGES = [['Home','Home.dc.html'],['Card','Card.dc.html'],['Writing','Writing.dc.html']];
+const KEY = 'nc-preview';
+
+class Component extends DCLogic {
+  state = { page:0, view:'mobile' };
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) this.setState(s); } catch (e) {}
+  }
+  save(p) { this.setState(p, () => { try { localStorage.setItem(KEY, JSON.stringify({ page:this.state.page, view:this.state.view })); } catch (e) {} }); }
+  renderVals() {
+    const { page, view } = this.state;
+    const mob = view === 'mobile';
+    const tab = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#000000' : '#CCCCCC' });
+    return {
+      pages: PAGES.map(([label], i) => ({ label, on: i === page, ...tab(i === page), pick: () => this.save({ page:i }) })),
+      views: [['mobile','Mobile'],['desktop','Desktop']].map(([id,label]) => ({ label, on: id === view, ...tab(id === view), pick: () => this.save({ view:id }) })),
+      src: PAGES[page][1], title: PAGES[page][0] + ' preview', frameKey: page + view,
+      w: mob ? '390px' : '100%', h: mob ? '844px' : '100%',
+      r: mob ? '36px' : '0', align: mob ? 'flex-start' : 'stretch', pad: mob ? '24px 16px' : '0',
+      shadow: mob ? '0 0 0 10px #000000, 0 30px 80px rgba(0,0,0,0.5)' : 'none',
+    };
+  }
+}
+</script>
+</body>
+</html>

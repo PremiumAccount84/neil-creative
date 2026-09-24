@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}html,body{margin:0;background:#000000;color:#FFFFFF}a{color:#CCFF00;text-decoration:none}a:hover{color:#D9FF4D}</style>
+</helmet>
+<main style="font-family:'Inter',system-ui,sans-serif;padding:clamp(24px,5vw,64px);">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:56px;">
+    <header style="display:flex;flex-direction:column;gap:12px;">
+      <span style="font-size:15px;font-weight:500;letter-spacing:0.08em;display:flex;gap:6px;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></span>
+      <h1 style="margin:0;font-size:clamp(40px,6vw,72px);font-weight:400;line-height:1;letter-spacing:-0.035em;">Design system</h1>
+      <p style="margin:0;max-width:60ch;font-size:17px;line-height:1.55;color:#CCCCCC;">Lime on black, with white and clean neutral surfaces for contrast sections. One accent, used for the primary action and a single highlight per view.</p>
+    </header>
+
+    <section style="display:flex;flex-direction:column;gap:16px;">
+      <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Color</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="10">
+          <div style="display:flex;flex-direction:column;border-radius:16px;overflow:hidden;border:1px solid #262626;">
+            <div style="height:88px;background:{{ c.hex }};"></div>
+            <div style="padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:#111111;"><span style="font-size:14px;font-weight:500;">{{ c.name }}</span><span style="font-size:12px;color:#A6A6A6;">{{ c.hex }} · {{ c.use }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:16px;">
+      <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Type · Inter only (substitute for a licensed sans; no serif)</h2>
+      <div style="display:flex;flex-direction:column;border-top:1px solid #262626;">
+        <div style="display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #262626;"><span style="font-size:12px;color:#A6A6A6;">Display · 400 · 38–80 · −2.5% · italic for emphasis</span><span style="font-size:clamp(38px,5.6vw,80px);font-weight:400;line-height:1.02;letter-spacing:-0.025em;">Build Systems That <em style="color:#CCFF00;">Scale</em></span></div>
+        <div style="display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #262626;"><span style="font-size:12px;color:#A6A6A6;">Statement · 400 · 30–58 · 1.12</span><span style="font-size:clamp(28px,4vw,48px);font-weight:400;line-height:1.12;letter-spacing:-0.02em;">They fail because they lack systems.</span></div>
+        <div style="display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #262626;"><span style="font-size:12px;color:#A6A6A6;">Sans title · 600 · 17–19</span><span style="font-size:19px;font-weight:500;">DeedShare Labs</span></div>
+        <div style="display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #262626;"><span style="font-size:12px;color:#A6A6A6;">Body · 400 · 16–19 · 1.5</span><span style="font-size:17px;line-height:1.5;color:#CCCCCC;">Applying an engineering mindset to business, leadership, &amp; human behavior.</span></div>
+        <div style="display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #262626;"><span style="font-size:12px;color:#A6A6A6;">Label · 600 · 14 · sentence case</span><span style="font-size:14px;font-weight:500;color:#A6A6A6;">Founder Perspective</span></div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:32px;">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Spacing · radii</h2>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#CCCCCC;">4 · 8 · 12 · 16 · 20 · 24 · 32 · 48 · 64 · 96. Section padding clamps 20→64px horizontal. Max widths 1120 (reading) / 1280 (grid).</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+          <div style="width:72px;height:56px;border-radius:12px;background:#262626;display:flex;align-items:flex-end;padding:6px;font-size:11px;">12 field</div>
+          <div style="width:96px;height:72px;border-radius:20px;background:#262626;display:flex;align-items:flex-end;padding:8px;font-size:11px;">20 row</div>
+          <div style="width:120px;height:88px;border-radius:24px;background:#262626;display:flex;align-items:flex-end;padding:10px;font-size:11px;">24 card</div>
+          <div style="width:120px;height:44px;border-radius:999px;background:#262626;display:flex;align-items:center;justify-content:center;font-size:11px;">999 button</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Buttons · 56 / 48 / 44 tall</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <span style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:999px;background:#CCFF00;color:#110E08;font-weight:500;">Primary</span>
+          <span style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:999px;border:1.5px solid #4D4D4D;font-weight:500;">Secondary</span>
+          <span style="display:flex;align-items:center;height:44px;padding:0 18px;border-radius:999px;background:#FFFFFF;color:#110E08;font-weight:500;">Nav action</span>
+          <span style="display:flex;align-items:center;min-height:44px;font-weight:500;border-bottom:1.5px solid #CCFF00;">Text link ↗</span>
+        </div>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#CCCCCC;">On paper sections, primary becomes ink (#000000) with white text. ↗ marks external destinations; → marks in-site flows.</p>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:32px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Fields</h2>
+        <span style="font-size:15px;font-weight:500;">Email</span>
+        <div style="height:56px;border-radius:12px;background:#1A1A1A;border:1.5px solid #333333;display:flex;align-items:center;padding:0 16px;color:#8F8F8F;">you@email.com</div>
+        <div style="height:56px;border-radius:12px;background:#1A1A1A;border:1.5px solid #CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);display:flex;align-items:center;padding:0 16px;">Focused</div>
+        <div style="height:56px;border-radius:12px;background:#1A1A1A;border:1.5px solid #FF8A7A;display:flex;align-items:center;padding:0 16px;">name@</div>
+        <span style="font-size:14px;color:#FF8A7A;">That email doesn’t look right.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Link rows · status</h2>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;min-height:72px;padding:12px;border-radius:20px;background:#111111;border:1px solid #262626;"><span style="width:44px;height:44px;border-radius:12px;background:#262626;display:flex;align-items:center;justify-content:center;font-weight:500;">in</span><span style="font-weight:500;">Default row</span></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;min-height:72px;padding:12px;border-radius:20px;background:#CCFF00;color:#110E08;"><span style="width:44px;height:44px;border-radius:12px;background:#000000;"></span><span style="font-weight:500;">Prominent row (one per view)</span></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;min-height:72px;padding:12px;border-radius:20px;border:1px dashed #333333;color:#8F8F8F;"><span style="width:44px;height:44px;border-radius:12px;background:#141414;"></span><span style="font-weight:500;">Pending, not clickable</span></div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:12px;">
+      <h2 style="margin:0;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#A6A6A6;">Motion</h2>
+      <p style="margin:0;max-width:70ch;font-size:15px;line-height:1.6;color:#CCCCCC;">Native smooth scrolling between homepage sections, 200–240ms ease on indicator and progress changes. No parallax or entrance animations. <code style="color:#FFFFFF;">prefers-reduced-motion</code> switches all scrolling to instant and disables transitions.</p>
+    </section>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { colors: [
+      { name:'Lime', hex:'#CCFF00', use:'accent' }, { name:'Lime hover', hex:'#D9FF4D', use:'hover' }, { name:'Warm black', hex:'#110E08', use:'text on accent' },
+      { name:'Ink', hex:'#000000', use:'base' }, { name:'Charcoal', hex:'#111111', use:'surface' },
+      { name:'Graphite', hex:'#1A1A1A', use:'field' }, { name:'Line', hex:'#333333', use:'border' },
+      { name:'Muted', hex:'#A6A6A6', use:'2nd text' }, { name:'White', hex:'#FFFFFF', use:'text' },
+      { name:'Paper', hex:'#F4F4F2', use:'light section' }, { name:'Error', hex:'#FF8A7A', use:'on dark' },
+    ] };
+  }
+}
+</script>
+</body>
+</html>

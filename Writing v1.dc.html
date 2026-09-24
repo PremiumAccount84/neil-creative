@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#000000;color:#FFFFFF;-webkit-text-size-adjust:100%}
+a{color:#FFFFFF;text-decoration:none}
+a:hover{color:#FFFFFF}
+input,select,button{font:inherit}
+:focus-visible{outline:3px solid rgba(204,255,0,0.8);outline-offset:2px}
+@keyframes nc-pulse{0%,100%{opacity:.55}50%{opacity:1}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+<div data-screen-label="Writing" style="min-height:100dvh;font-family:'Inter',system-ui,sans-serif;">
+  <header style="position:sticky;top:0;z-index:30;padding:env(safe-area-inset-top) clamp(16px,4vw,48px) 0;background:rgba(10,10,10,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
+    <div style="max-width:1120px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <a href="Home.dc.html" aria-label="Neil Creative home" style="display:flex;gap:6px;align-items:center;min-height:44px;color:#FFFFFF;font-size:15px;font-weight:500;letter-spacing:0.08em;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></a>
+      <a href="Home.dc.html" style="display:flex;align-items:center;min-height:44px;padding:0 4px;color:#CCCCCC;font-size:15px;font-weight:500;" style-hover="color:#FFFFFF;">← Home</a>
+    </div>
+  </header>
+
+  <main style="padding:clamp(40px,7vw,96px) clamp(20px,5vw,64px) 64px;">
+    <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,6vw,72px);">
+      <div style="display:flex;flex-direction:column;gap:18px;max-width:760px;">
+        <h1 style="margin:0;font-size:clamp(40px,5.6vw,68px);font-weight:500;line-height:1.05;letter-spacing:-0.025em;text-wrap:balance;">Notes From Your Chief of Staff</h1>
+        <blockquote style="margin:0;padding:2px 0 2px 16px;border-left:3px solid #CCFF00;font-size:clamp(18px,1.8vw,22px);font-style:italic;font-weight:500;">“Clarity Breeds Confidence”</blockquote>
+        <p style="margin:0;max-width:52ch;font-size:clamp(17px,1.5vw,20px);line-height:1.55;color:#CCCCCC;text-wrap:pretty;">Here are short notes that I will be sharing for clearer thinking, better decisions, and moving forward with your business.</p>
+        <span style="font-size:17px;font-style:italic;font-weight:500;">By Christian Jones</span>
+      </div>
+
+      <section aria-label="Articles" aria-busy="{{ loading }}" style="display:flex;flex-direction:column;border-top:1px solid #333333;">
+        <sc-if value="{{ refreshFailed }}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:14px 0;border-bottom:1px solid #1A1A1A;font-size:15px;color:#A6A6A6;">
+            <span>Showing saved articles. New posts couldn’t be checked just now.</span>
+            <button type="button" onClick="{{ retry }}" style="min-height:44px;padding:0 16px;border-radius:36px;border:1.5px solid #4D4D4D;color:#FFFFFF;background:transparent;font-size:14px;font-weight:500;cursor:pointer;">Check again</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+          <sc-for list="{{ articles }}" as="a" hint-placeholder-count="3">
+            <article style="display:grid;grid-template-columns:clamp(72px,12vw,112px) minmax(0,1fr);gap:clamp(14px,2.4vw,28px);align-items:start;padding:clamp(18px,2.6vw,28px) 0;border-bottom:1px solid #262626;">
+              <div aria-hidden="true" style="aspect-ratio:1/1;border-radius:14px;background:#1A1A1A;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:clamp(24px,3.4vw,36px);">CN</div>
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0;">
+                <time dateTime="{{ a.iso }}" style="font-size:14px;color:#A6A6A6;">{{ a.date }}</time>
+                <h2 style="margin:0;font-size:clamp(22px,2.6vw,32px);font-weight:400;line-height:1.15;letter-spacing:-0.015em;text-wrap:balance;"><a href="{{ a.url }}" target="_blank" rel="noopener" style-hover="text-decoration:underline;text-decoration-color:#CCFF00;text-decoration-thickness:2px;text-underline-offset:5px;">{{ a.title }}</a></h2>
+                <p style="margin:0;max-width:62ch;font-size:16px;line-height:1.55;color:#CCCCCC;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ a.excerpt }}</p>
+                <a href="{{ a.url }}" target="_blank" rel="noopener" aria-label="Read article: {{ a.title }}" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;" style-hover="text-decoration:underline;">Read article ↗</a>
+              </div>
+            </article>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+          <sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="3">
+            <div aria-hidden="true" style="display:flex;flex-direction:column;gap:14px;padding:36px 0;border-bottom:1px solid #262626;animation:nc-pulse 1.4s ease-in-out infinite;">
+              <span style="width:120px;height:14px;border-radius:6px;background:#1A1A1A;"></span>
+              <span style="width:min(640px,90%);height:34px;border-radius:8px;background:#1A1A1A;"></span>
+              <span style="width:min(520px,75%);height:16px;border-radius:6px;background:#1A1A1A;"></span>
+            </div>
+          </sc-for>
+          <span role="status" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Loading articles</span>
+        </sc-if>
+
+        <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:48px 0;">
+            <h2 style="margin:0;font-size:28px;font-weight:400;">No articles here yet.</h2>
+            <p style="margin:0;font-size:17px;line-height:1.55;color:#CCCCCC;">New pieces appear here after they’re published on Substack.</p>
+            <a href="https://thechrisneil.substack.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;height:52px;padding:0 22px;border-radius:36px;background:#CCFF00;color:#110E08;font-size:15px;font-weight:500;white-space:nowrap" style-hover="color:#110E08;background:#D9FF4D;">Visit Substack ↗</a>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:48px 0;">
+            <h2 style="margin:0;font-size:28px;font-weight:400;">Articles couldn’t load.</h2>
+            <p style="margin:0;font-size:17px;line-height:1.55;color:#CCCCCC;">Try again, or read everything directly on Substack.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;">
+              <button type="button" onClick="{{ retry }}" style="height:52px;padding:0 22px;border-radius:36px;border:0;background:#CCFF00;color:#110E08;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap">Try again</button>
+              <a href="https://thechrisneil.substack.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;height:52px;padding:0 22px;border-radius:36px;border:1.5px solid #4D4D4D;color:#FFFFFF;font-size:15px;font-weight:500;white-space:nowrap">Open Substack ↗</a>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+
+      <section id="subscribe" aria-labelledby="h-sub" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(24px,4vw,64px);padding:clamp(24px,4vw,48px);border-radius:28px;background:#111111;border:1px solid #262626;color:#FFFFFF;">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <span style="font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#CCFF00;">Subscribe</span>
+          <h2 id="h-sub" style="margin:0;font-size:clamp(34px,4.4vw,56px);font-weight:400;line-height:1.02;letter-spacing:-0.025em;">Get my next piece.</h2>
+          <p style="margin:0;max-width:36ch;font-size:17px;line-height:1.55;color:#CCCCCC;">New writing on business, leadership, and systems. Get notified when I publish.</p>
+        </div>
+        <dc-import name="Subscribe" demo-outcome="{{ demoS }}" hint-size="100%,520px"></dc-import>
+      </section>
+    </div>
+  </main>
+
+  <dc-import name="SiteFooter" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;feedState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loaded&quot;,&quot;loading&quot;,&quot;empty&quot;,&quot;refresh-failed&quot;,&quot;error&quot;],&quot;default&quot;:&quot;loaded&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;demoSubscribe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;}}">
+const ARTICLES = [
+  { title:'The Best Leaders Make Themselves Less Necessary', date:'Sep 23, 2026', iso:'2026-09-23',
+    excerpt:'Yesterday I sat down with the GM of a coffee shop and asked him a question: what’s the common denominator behind a successful business operation?',
+    url:'https://thechrisneil.substack.com/p/the-best-leaders-make-themselves' },
+  { title:'The Product Is Not the Advantage. The Operating System Is.', date:'', iso:'', excerpt:'',
+    url:'https://thechrisneil.substack.com/p/the-product-is-not-the-advantage' },
+  { title:'Stop Building for Vibes. Build to Understand.', date:'', iso:'', excerpt:'',
+    url:'https://thechrisneil.substack.com/p/stop-building-for-vibes-build-to' },
+];
+
+class Component extends DCLogic {
+  state = { override:null };
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const feed = this.state.override ?? this.props.feedState ?? 'loaded';
+    const hasCache = feed === 'loaded' || feed === 'refresh-failed';
+    const n = ARTICLES.length;
+    return {
+      loading: feed === 'loading', empty: feed === 'empty', error: feed === 'error',
+      refreshFailed: feed === 'refresh-failed', showList: hasCache,
+      articles: ARTICLES.map((a, i) => ({ ...a, num: String(n - i).padStart(2, '0') })),
+      skeletons: [1,2,3],
+      retry: () => { this.setState({ override:'loading' }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ override:'loaded' }), 1200); },
+      demoS: this.props.demoSubscribe ?? 'success',
+    };
+  }
+}
+</script>
+</body>
+</html>

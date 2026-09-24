@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}html,body{margin:0;background:#141414;color:#FFFFFF}a{color:#CCFF00;text-decoration:none}a:hover{color:#D9FF4D}</style>
+</helmet>
+<div style="font-family:'Inter',system-ui,sans-serif;padding:64px;display:flex;flex-direction:column;gap:80px;width:max-content;">
+  <header style="display:flex;flex-direction:column;gap:10px;">
+    <span style="font-size:15px;font-weight:500;letter-spacing:0.08em;"><span>NEIL </span><span style="color:#CCFF00;">CREATIVE</span></span>
+    <h1 style="margin:0;font-size:56px;font-weight:500;letter-spacing:-0.03em;">Responsive overview · 390 / 768 / 1440</h1>
+    <p style="margin:0;font-size:18px;color:#CCCCCC;">Live pages. Open each directly: <a href="Home.dc.html">Home</a> · <a href="Card.dc.html">Card</a> · <a href="Writing.dc.html">Writing</a> · <a href="Questionnaire.dc.html">Questionnaire</a> · <a href="Subscribe.dc.html">Subscribe</a> · <a href="Design System.dc.html">Design system</a></p>
+  </header>
+  <sc-for list="{{ pages }}" as="p" hint-placeholder-count="3">
+    <section style="display:flex;flex-direction:column;gap:20px;">
+      <h2 style="margin:0;font-size:32px;font-weight:500;">{{ p.name }}</h2>
+      <div style="display:flex;gap:48px;align-items:flex-start;">
+        <sc-for list="{{ p.frames }}" as="f" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <span style="font-size:14px;color:#A6A6A6;">{{ f.label }}</span>
+            <iframe src="{{ f.src }}" title="{{ f.label }}" loading="lazy" style="width:{{ f.w }};height:{{ f.h }};border:0;border-radius:16px;background:#000000;box-shadow:0 12px 40px rgba(0,0,0,0.3);"></iframe>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const sizes = [[390,844],[768,1024],[1440,900]];
+    const mk = (name, src) => ({ name, frames: sizes.map(([w,h]) => ({ label: `${name} · ${w}×${h}`, src, w: w + 'px', h: h + 'px' })) });
+    return { pages: [mk('Home', 'Home.dc.html'), mk('Card', 'Card.dc.html'), mk('Writing', 'Writing.dc.html')] };
+  }
+}
+</script>
+</body>
+</html>

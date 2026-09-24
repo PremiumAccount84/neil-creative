@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/Home.dc.html" },
+    { "source": "/card", "destination": "/Card.dc.html" },
+    { "source": "/writing", "destination": "/Writing.dc.html" }
+  ]
+}

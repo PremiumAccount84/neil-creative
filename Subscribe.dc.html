@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"></helmet>
+<div onKeyDown="{{ onKey }}" style="position:{{ pos }};inset:0;z-index:70;display:{{ display }};justify-content:center;align-items:{{ align }};background:{{ scrim }};font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;">
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ close }}" aria-hidden="true" style="position:absolute;inset:0;"></div>
+  </sc-if>
+  <div role="{{ role }}" aria-modal="{{ modal }}" aria-label="Get my next piece" style="position:relative;width:100%;max-width:{{ maxW }};max-height:{{ maxH }};overflow-y:auto;overscroll-behavior:contain;background:{{ panelBg }};border-radius:{{ radius }};padding:{{ pad }};box-sizing:border-box;">
+    <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#CCFF00;">Subscribe</span>
+          <h2 style="margin:0;font-size:clamp(28px,6vw,36px);font-weight:400;line-height:1.05;letter-spacing:-0.02em;">Get my next piece.</h2>
+          <p style="margin:0;font-size:16px;line-height:1.5;color:#A6A6A6;text-wrap:pretty;">New writing on business, leadership, and systems. Get notified when I publish.</p>
+        </div>
+        <button type="button" onClick="{{ close }}" aria-label="Close" style="flex:0 0 auto;width:44px;height:44px;border-radius:36px;border:0;background:#262626;color:#FFFFFF;font-size:22px;line-height:1;cursor:pointer;white-space:nowrap" style-hover="background:#333333;">×</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submit }}" noValidate="{{ true }}" style="display:flex;flex-direction:column;gap:18px;">
+        <sc-if value="{{ failed }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;background:#2A1614;border:1px solid #5C2A24;">
+            <strong style="font-size:15px;color:#FF8A7A;">We couldn’t subscribe you.</strong>
+            <span style="font-size:15px;line-height:1.45;color:#E7D3CF;">Nothing was saved and your details are still here. Try again.</span>
+          </div>
+        </sc-if>
+
+        <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0;">
+          <legend style="padding:0;margin-bottom:10px;font-size:15px;font-weight:500;">How should I notify you?</legend>
+          <div role="radiogroup" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:999px;background:#1A1A1A;border:1px solid #333333;">
+            <sc-for list="{{ channels }}" as="c" hint-placeholder-count="3">
+              <button type="button" role="radio" aria-checked="{{ c.on }}" onClick="{{ c.pick }}" style="height:44px;border:0;border-radius:36px;font-size:15px;font-weight:500;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};white-space:nowrap">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </fieldset>
+
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:500;">
+          <span>Name <span style="font-weight:400;color:#A6A6A6;">(optional)</span></span>
+          <input type="text" autoComplete="name" value="{{ v.name }}" onChange="{{ h.name }}" style="height:52px;padding:0 16px;font-size:16px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+        </label>
+
+        <sc-if value="{{ needEmail }}" hint-placeholder-val="{{ true }}">
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:500;">
+            <span>Email address</span>
+            <input type="email" autoComplete="email" inputMode="email" placeholder="you@email.com" value="{{ v.email }}" onChange="{{ h.email }}" aria-invalid="{{ inv.email }}" style="height:52px;padding:0 16px;font-size:16px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.email }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+            <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.email }}</span>
+          </label>
+        </sc-if>
+
+        <sc-if value="{{ needPhone }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:500;">
+            <span>Mobile number</span>
+            <div style="display:grid;grid-template-columns:104px minmax(0,1fr);gap:8px;">
+              <select aria-label="Country code" value="{{ v.cc }}" onChange="{{ h.cc }}" style="height:52px;padding:0 10px;font-size:16px;color:#FFFFFF;background:#1A1A1A;border:1.5px solid #333333;border-radius:12px;outline:none;" style-focus="border-color:#CCFF00;">
+                <sc-for list="{{ codes }}" as="k" hint-placeholder-count="1"><option value="{{ k.v }}">{{ k.l }}</option></sc-for>
+              </select>
+              <input type="tel" aria-label="Mobile number" autoComplete="tel-national" inputMode="tel" placeholder="(555) 555-0123" value="{{ v.phone }}" onChange="{{ h.phone }}" aria-invalid="{{ inv.phone }}" style="height:52px;padding:0 16px;font-size:16px;font-weight:400;color:#FFFFFF;background:#1A1A1A;border:1.5px solid {{ bd.phone }};border-radius:12px;outline:none;min-width:0;" style-focus="border-color:#CCFF00;box-shadow:0 0 0 3px rgba(204,255,0,0.25);">
+            </div>
+            <span role="alert" style="font-size:14px;font-weight:400;color:#FF8A7A;">{{ err.phone }}</span>
+          </div>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <sc-if value="{{ needEmail }}" hint-placeholder-val="{{ true }}">
+            <label style="display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;">
+              <input type="checkbox" checked="{{ v.okEmail }}" onChange="{{ h.okEmail }}" style="width:22px;height:22px;margin:1px 0 0;accent-color:#CCFF00;cursor:pointer;">
+              <span style="font-size:14px;line-height:1.5;color:#CCCCCC;">Email me when new writing is published. I can unsubscribe from any email.<span style="display:block;color:#FF8A7A;">{{ err.okEmail }}</span></span>
+            </label>
+          </sc-if>
+          <sc-if value="{{ needPhone }}" hint-placeholder-val="{{ false }}">
+            <label style="display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;">
+              <input type="checkbox" checked="{{ v.okSms }}" onChange="{{ h.okSms }}" style="width:22px;height:22px;margin:1px 0 0;accent-color:#CCFF00;cursor:pointer;">
+              <span style="font-size:14px;line-height:1.5;color:#CCCCCC;">Text me a link when new writing is published. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help.<span style="display:block;color:#FF8A7A;">{{ err.okSms }}</span></span>
+            </label>
+          </sc-if>
+        </div>
+
+        <button type="submit" disabled="{{ busy }}" style="height:56px;border:0;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;opacity:{{ busyOpacity }};white-space:nowrap" style-hover="background:#D9FF4D;">{{ submitLabel }}</button>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#8F8F8F;">Subscribing here is separate from the connection questionnaire. Privacy and terms links go here.</p>
+      </form>
+    </sc-if>
+
+    <sc-if value="{{ showResult }}" hint-placeholder-val="{{ false }}">
+      <div role="status" aria-live="polite" style="display:flex;flex-direction:column;gap:18px;">
+        <div style="width:48px;height:48px;border-radius:999px;background:{{ res.badgeBg }};color:#110E08;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;">{{ res.badge }}</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <h3 style="margin:0;font-size:26px;font-weight:400;line-height:1.1;letter-spacing:-0.01em;">{{ res.title }}</h3>
+          <p style="margin:0;font-size:16px;line-height:1.5;color:#CCCCCC;text-wrap:pretty;">{{ res.body }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;border-top:1px solid #333333;">
+          <sc-for list="{{ res.lines }}" as="l" hint-placeholder-count="1">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #333333;">
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:15px;font-weight:500;">{{ l.channel }}</span><span style="font-size:14px;color:#A6A6A6;overflow-wrap:anywhere;">{{ l.to }}</span></span>
+              <span style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};">{{ l.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-if value="{{ res.canRetry }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ retryText }}" disabled="{{ busy }}" style="flex:1 1 180px;height:52px;border:0;border-radius:36px;background:#CCFF00;color:#110E08;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#D9FF4D;">{{ retryLabel }}</button>
+          </sc-if>
+          <button type="button" onClick="{{ done }}" style="flex:1 1 180px;height:52px;border-radius:36px;background:transparent;color:#FFFFFF;border:1.5px solid #4D4D4D;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="border-color:#FFFFFF;">{{ doneLabel }}</button>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:760},&quot;modal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;demoOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const CODES = [{v:'+1',l:'US +1'},{v:'+1 ',l:'CA +1'},{v:'+44',l:'UK +44'},{v:'+234',l:'NG +234'},{v:'+233',l:'GH +233'},{v:'+61',l:'AU +61'},{v:'+49',l:'DE +49'},{v:'+33',l:'FR +33'},{v:'+91',l:'IN +91'}];
+const BLANK = { name:'', email:'', cc:'+1', phone:'', okEmail:false, okSms:false };
+
+class Component extends DCLogic {
+  state = { channel:'email', v:{...BLANK}, err:{}, status:'idle', result:null, attempts:0, wide:true };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ wide: window.innerWidth >= 768 });
+    this.onResize(); window.addEventListener('resize', this.onResize);
+  }
+  componentDidUpdate(prev) {
+    if (this.props.modal && this.props.open && !prev.open && this.state.status === 'idle' && this.props.initialChannel) {
+      this.setState({ channel: this.props.initialChannel, err:{} });
+    }
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearTimeout(this.t); }
+
+  set(k, val) { this.setState(s => ({ v:{...s.v, [k]:val}, err:{...s.err, [k]:''} })); }
+
+  validate() {
+    const { v, channel } = this.state, e = {};
+    const em = channel !== 'text', ph = channel !== 'email';
+    if (em) {
+      if (!v.email.trim()) e.email = 'Enter your email address.';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'That email doesn’t look right.';
+      if (!v.okEmail) e.okEmail = 'Check this box to get email notifications.';
+    }
+    if (ph) {
+      const d = v.phone.replace(/\D/g, '');
+      if (!d) e.phone = 'Enter your mobile number.';
+      else if (d.length < 7 || d.length > 15) e.phone = 'Enter a valid mobile number.';
+      if (!v.okSms) e.okSms = 'Check this box to get text notifications.';
+    }
+    return e;
+  }
+
+  run(onlyText) {
+    if (this.state.status === 'submitting') return;
+    this.setState(s => ({ status:'submitting', attempts: s.attempts + 1 }));
+    this.t = setTimeout(() => {
+      const out = this.props.demoOutcome ?? 'success';
+      const both = this.state.channel === 'both';
+      if (onlyText) { this.setState({ status:'done', result:{ kind:'success' } }); return; }
+      if (out === 'fail' && this.state.attempts === 1) { this.setState({ status:'error' }); return; }
+      let kind = out === 'fail' ? 'success' : out;
+      if (kind === 'partial' && !both) kind = 'success';
+      this.setState({ status:'done', result:{ kind } });
+    }, 1100);
+  }
+
+  submit = (e) => {
+    e.preventDefault();
+    const err = this.validate();
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.run(false);
+  };
+
+  reset = () => { clearTimeout(this.t); this.setState({ channel:'email', v:{...BLANK}, err:{}, status:'idle', result:null, attempts:0 }); };
+
+  close = () => {
+    if (this.state.status === 'done') this.reset();
+    this.props.onClose && this.props.onClose();
+  };
+
+  resultView() {
+    const { result, channel, v } = this.state;
+    if (!result) return {};
+    const em = channel !== 'text', ph = channel !== 'email';
+    const phone = v.cc.trim() + ' ' + v.phone;
+    const ok = { bg:'#CCFF00', fg:'#110E08' }, wait = { bg:'#262626', fg:'#FFFFFF' }, bad = { bg:'#3A1D1A', fg:'#FF8A7A' };
+    const line = (channel, to, status, c) => ({ channel, to, status, ...c });
+    const k = result.kind;
+    if (k === 'verify') return {
+      badge:'…', badgeBg:'#FFFFFF', title:'Almost there.',
+      body: em && ph ? 'Confirm both channels to finish: open the link in your inbox, and reply YES to the text I just sent.' : em ? 'Open the confirmation link in your inbox to finish subscribing.' : 'Reply YES to the text I just sent to finish subscribing.',
+      lines:[em && line('Email', v.email, 'Confirm in inbox', wait), ph && line('Text', phone, 'Reply YES', wait)].filter(Boolean) };
+    if (k === 'already') return {
+      badge:'✓', badgeBg:'#FFFFFF', title:'You’re already subscribed.',
+      body:'No changes needed. You’ll keep getting new writing on the channels below.',
+      lines:[em && line('Email', v.email, 'Already on', wait), ph && line('Text', phone, 'Already on', wait)].filter(Boolean) };
+    if (k === 'partial') return {
+      badge:'!', badgeBg:'#FFFFFF', title:'Email is set. Text didn’t go through.',
+      body:'You’ll get new writing by email. I couldn’t add your number for texts. Retry now, or keep email only.',
+      canRetry:true,
+      lines:[line('Email', v.email, 'Subscribed', ok), line('Text', phone, 'Not added', bad)] };
+    return {
+      badge:'✓', badgeBg:'#CCFF00', title:'You’re subscribed.',
+      body:'You’ll hear from me when the next piece is published.',
+      lines:[em && line('Email', v.email, 'Subscribed', ok), ph && line('Text', phone, 'Subscribed', ok)].filter(Boolean) };
+  }
+
+  renderVals() {
+    const { channel, v, err, status, wide } = this.state;
+    const modal = !!this.props.modal, open = modal ? !!this.props.open : true;
+    const busy = status === 'submitting';
+    const h = {};
+    ['name','email','cc','phone'].forEach(k => h[k] = e => this.set(k, e.target.value));
+    h.okEmail = e => this.set('okEmail', e.target.checked);
+    h.okSms = e => this.set('okSms', e.target.checked);
+    const errOut = { email:'', phone:'', okEmail:'', okSms:'', ...err };
+    const bd = { email: err.email ? '#FF8A7A' : '#333333', phone: err.phone ? '#FF8A7A' : '#333333' };
+    return {
+      modal, role: modal ? 'dialog' : 'region',
+      pos: modal ? 'fixed' : 'relative',
+      align: modal ? (wide ? 'center' : 'flex-end') : 'stretch',
+      scrim: modal ? 'rgba(0,0,0,0.72)' : 'transparent',
+      maxW: modal ? '520px' : '560px',
+      maxH: modal ? (wide ? 'calc(100dvh - 48px)' : '92dvh') : 'none',
+      panelBg: modal ? '#111111' : 'transparent',
+      radius: modal ? (wide ? '24px' : '24px 24px 0 0') : '0',
+      pad: modal ? (wide ? '32px' : '24px 20px calc(24px + env(safe-area-inset-bottom))') : '0',
+      display: open ? 'flex' : 'none',
+      v, h, err: errOut, bd, inv: { email: !!err.email, phone: !!err.phone },
+      channels: [['email','Email'],['text','Text'],['both','Both']].map(([id,label]) => {
+        const on = channel === id;
+        return { label, on, bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#000000' : '#CCCCCC', pick: () => this.setState({ channel:id, err:{} }) };
+      }),
+      needEmail: channel !== 'text', needPhone: channel !== 'email',
+      codes: CODES,
+      showForm: status !== 'done', showResult: status === 'done',
+      failed: status === 'error',
+      busy, busyOpacity: busy ? 0.7 : 1,
+      submitLabel: busy ? 'Subscribing…' : (status === 'error' ? 'Try again' : 'Subscribe'),
+      retryLabel: busy ? 'Retrying…' : 'Retry text',
+      res: this.resultView(),
+      retryText: () => this.run(true),
+      doneLabel: modal ? 'Done' : 'Subscribe another',
+      done: modal ? this.close : this.reset,
+      close: this.close,
+      submit: this.submit,
+      onKey: (e) => { if (modal && e.key === 'Escape') this.close(); },
+    };
+  }
+}
+</script>
+</body>
+</html>
