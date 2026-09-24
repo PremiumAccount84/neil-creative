@@ -48,10 +48,11 @@ input,select,button{font:inherit}
     <section aria-label="Connect" style="display:flex;flex-direction:column;gap:16px;">
       <nav aria-label="Card links" style="display:flex;flex-direction:column;gap:8px;">
         <sc-if value="{{ hasLatest }}" hint-placeholder-val="{{ false }}">
-          <a href="{{ latestUrl }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:44px minmax(0,1fr) 20px;align-items:center;gap:14px;min-height:72px;padding:12px 18px 12px 12px;border-radius:20px;background:#111111;border:1px solid #262626;color:#FFFFFF;" style-hover="background:#1A1A1A;border-color:#333333;">
-            <span aria-hidden="true" style="width:44px;height:44px;border-radius:12px;background:#1F1A08;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;letter-spacing:0.06em;">NEW</span>
-            <span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:17px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ latestTitle }}</span><span style="font-size:14px;color:#A6A6A6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ latestExcerpt }}</span></span>
-            <span aria-hidden="true" style="color:#A6A6A6;">↗</span>
+          <a href="{{ latestUrl }}" target="_blank" rel="noopener" style="position:relative;display:flex;flex-direction:column;gap:10px;min-height:144px;padding:24px 56px 24px 24px;border-radius:28px;background:#0D0D0D;border:2px solid #CCFF00;color:#FFFFFF;box-shadow:0 0 24px rgba(204,255,0,0.15);" style-hover="box-shadow:0 0 32px rgba(204,255,0,0.28);">
+            <span style="font-size:16px;font-weight:500;color:#CCFF00;">Latest · {{ latestDate }}</span>
+            <span style="font-size:clamp(24px,4vw,30px);font-weight:500;line-height:1.15;letter-spacing:-0.01em;">{{ latestTitle }}</span>
+            <span style="font-size:16px;color:#A6A6A6;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ latestExcerpt }}</span>
+            <span aria-hidden="true" style="position:absolute;top:24px;right:24px;color:#A6A6A6;font-size:20px;">↗</span>
           </a>
         </sc-if>
         <a href="https://www.linkedin.com/in/christian-neil-jones/" target="_blank" rel="noopener" style="display:grid;grid-template-columns:44px minmax(0,1fr) 20px;align-items:center;gap:14px;min-height:72px;padding:12px 18px 12px 12px;border-radius:20px;background:#111111;border:1px solid #262626;color:#FFFFFF;" style-hover="background:#1A1A1A;border-color:#333333;">
@@ -176,7 +177,7 @@ class Component extends DCLogic {
     this.loadLatestPost();
   }
   loadLatestPost() {
-    fetch(SUPABASE_URL + '/rest/v1/writing_posts?select=title,url,excerpt&order=published_at.desc.nullslast&limit=1', {
+    fetch(SUPABASE_URL + '/rest/v1/writing_posts?select=title,url,excerpt,published_at&order=published_at.desc.nullslast&limit=1', {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
     })
       .then(res => res.ok ? res.json() : [])
@@ -240,7 +241,8 @@ class Component extends DCLogic {
       hasLatest: !!lp,
       latestUrl: lp ? lp.url : '#',
       latestTitle: lp ? lp.title : '',
-      latestExcerpt: excerptRaw.length > 70 ? excerptRaw.slice(0, 70) + '…' : excerptRaw,
+      latestExcerpt: excerptRaw.length > 160 ? excerptRaw.slice(0, 160) + '…' : excerptRaw,
+      latestDate: lp && lp.published_at ? new Date(lp.published_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '',
       qOpen: this.state.qOpen, sOpen: this.state.sOpen,
       openQ: () => { this.lock(true); this.setState({ qOpen:true }); },
       closeQ: () => { this.lock(false); this.setState({ qOpen:false }); },
