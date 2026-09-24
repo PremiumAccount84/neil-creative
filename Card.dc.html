@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/site-config.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -101,7 +102,7 @@ input,select,button{font:inherit}
       </nav>
 
       <button type="button" onClick="{{ openSub }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:0 20px;margin-top:8px;border-radius:36px;background:transparent;border:1.5px solid #3D3D3D;color:#FFFFFF;cursor:pointer;text-align:left;" style-hover="border-color:#FFFFFF;">
-        <span style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:16px;font-weight:500;">Get my next piece</span><span style="font-size:13px;color:#A6A6A6;">Email, text, or both</span></span>
+        <span style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:16px;font-weight:500;">Get my next piece</span><span style="font-size:13px;color:#A6A6A6;">{{ notificationChannels }}</span></span>
         <span aria-hidden="true" style="font-size:18px;">+</span>
       </button>
 
@@ -248,6 +249,7 @@ class Component extends DCLogic {
       closeQ: () => { this.lock(false); this.setState({ qOpen:false }); },
       openSub: () => { this.lock(true); this.setState({ sOpen:true }); },
       closeSub: () => { this.lock(false); this.setState({ sOpen:false }); },
+      notificationChannels: window.NEIL_CREATIVE_FEATURES?.smsNotifications === true ? 'Email, text, or both' : 'Email notifications',
       demoQ: this.props.demoQuestionnaire ?? 'success',
       demoS: this.props.demoSubscribe ?? 'success',
       igReady: !!ig, igPending: !ig, igUrl: ig,
