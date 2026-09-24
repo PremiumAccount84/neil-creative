@@ -38,7 +38,7 @@
       </sc-for>
     </div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;font-size:14px;color:#8F8F8F;">
-      <a href="Home.dc.html" aria-label="Neil Creative home" style="display:flex;gap:5px;font-size:14px;font-weight:500;letter-spacing:0.14em;color:#FFFFFF;min-height:44px;align-items:center;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></a>
+      <a href="/" aria-label="Neil Creative home" style="display:flex;gap:5px;font-size:14px;font-weight:500;letter-spacing:0.14em;color:#FFFFFF;min-height:44px;align-items:center;"><span>NEIL</span><span style="color:#CCFF00;">CREATIVE</span></a>
       <span>© 2026 Neil Creative · Christian Neil Jones</span>
     </div>
   </div>
@@ -54,11 +54,11 @@ class Component extends DCLogic {
     const ig = (this.props.instagramUrl ?? '').trim();
     const email = (this.props.contactEmail ?? '').trim();
     return { groups: [
-      { title:'Read', items:[ page('Notes From Your Chief of Staff', 'Writing.dc.html'), ext('Substack', 'https://thechrisneil.substack.com/'), act('Get my next piece', this.props.onSubscribe, 'Writing.dc.html#subscribe', 'Email or text') ] },
+      { title:'Read', items:[ page('Notes From Your Chief of Staff', '/writing'), ext('Substack', 'https://thechrisneil.substack.com/'), act('Get my next piece', this.props.onSubscribe, '/writing#subscribe', 'Email or text') ] },
       { title:'Follow', items:[ ext('LinkedIn', 'https://www.linkedin.com/in/christian-neil-jones/'), ig ? ext('Instagram: DeedShare', ig) : pending('Instagram: DeedShare') ] },
       { title:'Main mission', items:[ ext('DeedShare', 'https://join.mydeedshare.com/') ] },
       { title:'Side missions', items:[ ext('Pynding', 'https://pynding-app.vercel.app/promo'), ext('DeedShare Labs', 'https://labs.mydeedshare.com/') ] },
-      { title:'Say hi', items:[ act('Get connected', this.props.onConnect, 'Home.dc.html#get-connected', 'Before we meet'), page('Digital card', 'Card.dc.html'), email ? ext(email, 'mailto:' + email) : pending('Email') ] },
+      { title:'Say hi', items:[ act('Get connected', this.props.onConnect, '/#get-connected', 'Before we meet'), page('Digital card', '/card'), email ? ext(email, 'mailto:' + email) : pending('Email') ] },
     ] };
   }
 }

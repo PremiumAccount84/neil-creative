@@ -21,9 +21,25 @@
   ],
   "redirects": [
     {
+      "source": "/Home.dc.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/Card.dc.html",
+      "destination": "/card",
+      "permanent": true
+    },
+    {
+      "source": "/Writing.dc.html",
+      "destination": "/writing",
+      "permanent": true
+    },
+    {
       "source": "/get-connected/:path*",
       "destination": "/#get-connected",
       "permanent": true
     }
-  ]
+  ],
+  "trailingSlash": false
 }
