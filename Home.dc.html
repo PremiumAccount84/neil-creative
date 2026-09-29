@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/site-config.js"></script>
+<script src="/writing-feed.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -120,6 +121,7 @@ input,select,button{font:inherit}
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-if value="{{ writingMessage }}"><a href="https://thechrisneil.substack.com/" target="_blank" rel="noopener" style="color:#CCCCCC;padding:18px 0;">{{ writingMessage }}</a></sc-if>
           <sc-for list="{{ articles }}" as="a" hint-placeholder-count="3">
             <a href="{{ a.url }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:16px;padding:18px 20px;border-radius:18px;background:#111111;border:1px solid {{ a.border }};color:#FFFFFF;" style-hover="background:#1A1A1A;color:#FFFFFF;">
               <span style="display:flex;flex-direction:column;gap:6px;min-width:0;">
@@ -223,15 +225,9 @@ const HDR = {
   white: { bg:'#000000', fg:'#FFFFFF', mark:'#CCFF00', btnBg:'#FFFFFF', btnFg:'#110E08', dot:'rgba(255,255,255,0.45)', dotOn:'#CCFF00' },
   gold:  { bg:'#CCFF00', fg:'#110E08', mark:'#110E08', btnBg:'#000000', btnFg:'#FFFFFF', dot:'rgba(10,10,10,0.3)', dotOn:'#110E08' },
 };
-const FEATURED = {
-  title: 'The Best Leaders Make Themselves Less Necessary',
-  date: 'Sep 23, 2026', iso: '2026-09-23',
-  excerpt: 'Yesterday I sat down with the GM of a coffee shop and asked him a question: what’s the common denominator behind a successful business operation?',
-  url: 'https://thechrisneil.substack.com/p/the-best-leaders-make-themselves',
-};
 
 class Component extends DCLogic {
-  state = { active:0, qOpen:false, sOpen:false, subChannel:'email', wide:true, reduce:false };
+  state = { active:0, qOpen:false, sOpen:false, subChannel:'email', wide:true, reduce:false, posts:[], writingFailed:false };
   scrollRef = React.createRef();
 
   componentDidMount() {
@@ -240,11 +236,19 @@ class Component extends DCLogic {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.setState({ reduce: mq.matches });
     this.observe();
+    this.loadWriting();
+    this.writingTimer = setInterval(() => { if (!document.hidden) this.loadWriting(); }, 300000);
     const hash = (location.hash || '').replace('#', '');
     if (hash === 'get-connected') this.setState({ qOpen:true });
   }
   componentDidUpdate() { if (!this.io) this.observe(); }
-  componentWillUnmount() { window.removeEventListener('resize', this.onResize); this.io && this.io.disconnect(); }
+  componentWillUnmount() { this.disposed = true; clearInterval(this.writingTimer); window.removeEventListener('resize', this.onResize); this.io && this.io.disconnect(); }
+
+  loadWriting() {
+    window.NeilWriting.load().then(({ posts, stale }) => {
+      if (!this.disposed) this.setState({ posts, writingFailed:stale });
+    }).catch(() => { if (!this.disposed) this.setState({ writingFailed:true }); });
+  }
 
   observe() {
     const root = this.scrollRef.current; if (!root) return;
@@ -278,12 +282,11 @@ class Component extends DCLogic {
       workImgH: wide ? 'min(64dvh, 560px)' : 'clamp(200px, 34dvh, 340px)',
       dots: SECTIONS.map(([label], i) => ({ label, current: i === active ? 'true' : undefined, h: i === active ? '18px' : '5px', c: i === active ? hdr.dotOn : hdr.dot, go: () => this.go(i) })),
       goTop: () => this.go(0), goWork: () => this.go(7), goNotes: () => this.go(6),
-      featured: FEATURED,
-      articles: [
-        { ...FEATURED, meta: 'Latest · ' + FEATURED.date, metaColor: '#CCFF00', border: '#CCFF00' },
-        { title: 'The Product Is Not the Advantage. The Operating System Is.', excerpt: '', url: 'https://thechrisneil.substack.com/p/the-product-is-not-the-advantage', meta: 'Substack', metaColor: '#A6A6A6', border: '#262626' },
-        { title: 'Stop Building for Vibes. Build to Understand.', excerpt: '', url: 'https://thechrisneil.substack.com/p/stop-building-for-vibes-build-to', meta: 'Substack', metaColor: '#A6A6A6', border: '#262626' },
-      ],
+      articles: this.state.posts.slice(0, 3).map((post, i) => ({
+        ...post, meta: (i === 0 && !this.state.writingFailed ? 'Latest · ' : '') + (post.date || 'Substack'),
+        metaColor: i === 0 ? '#CCFF00' : '#A6A6A6', border: i === 0 ? '#CCFF00' : '#262626',
+      })),
+      writingMessage: this.state.posts.length ? '' : (this.state.writingFailed ? 'Notes couldn’t load. Read the latest on Substack.' : 'Loading notes…'),
       qOpen, sOpen, subChannel,
       openQ: () => this.setState({ qOpen:true }), closeQ: () => this.setState({ qOpen:false }),
       subEmail: openSub('email'), subText: openSub('text'), subBoth: openSub('both'),

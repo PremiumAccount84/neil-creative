@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/site-config.js"></script>
+<script src="/writing-feed.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -123,44 +124,35 @@ input,select,button{font:inherit}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;feedState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loaded&quot;,&quot;loading&quot;,&quot;empty&quot;,&quot;refresh-failed&quot;,&quot;error&quot;],&quot;default&quot;:&quot;loaded&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;sampleFeed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;actual&quot;,&quot;12 sample&quot;],&quot;default&quot;:&quot;actual&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;},&quot;demoSubscribe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;verify&quot;,&quot;already&quot;,&quot;fail&quot;,&quot;partial&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype states&quot;}}">
-const SUPABASE_URL = 'https://htcunyeepqjcbxlfpcny.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_v_UsqCq_AHjTqptN93prDw_yCsZc99t';
 
 class Component extends DCLogic {
   state = { override:null, idx:1, sOpen:false, subChannel:'email', shared:false, posts:[], loadState:'loading' };
   feedRef = React.createRef();
 
-  componentDidMount() { this.init(); this.loadPosts(); }
+  componentDidMount() { this.init(); this.loadPosts(); this.feedTimer = setInterval(() => { if (!document.hidden) this.loadPosts(); }, 300000); }
   componentDidUpdate(prev) {
     if (prev.sampleFeed !== this.props.sampleFeed) { this.ready = false; this.setState({ idx: 1 }); }
     if (!this.ready) this.init();
   }
   loadPosts() {
-    fetch(SUPABASE_URL + '/rest/v1/writing_posts?select=title,url,excerpt,published_at&order=published_at.desc.nullslast', {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
-    })
-      .then(res => { if (!res.ok) throw new Error('feed failed'); return res.json(); })
-      .then(rows => {
-        const posts = rows.map(r => ({
-          title: r.title,
-          url: r.url,
-          excerpt: r.excerpt || '',
-          date: r.published_at ? new Date(r.published_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '',
-          iso: r.published_at ? r.published_at.slice(0, 10) : '',
-        }));
-        this.ready = false;
-        this.setState({ posts, loadState: posts.length ? 'loaded' : 'empty', override:null });
+    window.NeilWriting.load()
+      .then(({ posts, stale }) => {
+        if (this.disposed) return;
+        if (JSON.stringify(posts) !== JSON.stringify(this.state.posts)) this.ready = false;
+        this.setState({ posts, loadState: posts.length ? (stale ? 'refresh-failed' : 'loaded') : 'empty', override:null });
       })
-      .catch(() => this.setState({ loadState:'error', override:null }));
+      .catch(() => { if (!this.disposed) this.setState({ loadState:this.state.posts.length ? 'refresh-failed' : 'error', override:null }); });
   }
+
   init() {
+    if (this.disposed) return;
     const el = this.feedRef.current;
     if (!el || !el.querySelector('[data-card]') || !el.clientHeight) { requestAnimationFrame(() => this.init()); return; }
     this.ready = true;
     const i = this.cardsWithClones().length > this.realCards().length ? 1 : 0;
     this.jumpTo(i); if (this.state.idx !== i) this.setState({ idx: i });
   }
-  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.st); clearTimeout(this.sh); }
+  componentWillUnmount() { this.disposed = true; clearInterval(this.feedTimer); clearTimeout(this.t); clearTimeout(this.st); clearTimeout(this.sh); }
 
   articles() {
     const real = this.state.posts;
