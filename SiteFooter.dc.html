@@ -57,7 +57,7 @@ class Component extends DCLogic {
       { title:'Read', items:[ page('Notes From Your Chief of Staff', '/writing'), ext('Substack', 'https://thechrisneil.substack.com/'), act('Get my next piece', this.props.onSubscribe, '/writing#subscribe', 'Email or text') ] },
       { title:'Follow', items:[ ext('LinkedIn', 'https://www.linkedin.com/in/christian-neil-jones/'), ig ? ext('Instagram: DeedShare', ig) : pending('Instagram: DeedShare') ] },
       { title:'Main mission', items:[ ext('DeedShare', 'https://join.mydeedshare.com/') ] },
-      { title:'Side missions', items:[ ext('Pynding', 'https://pynding.com/promo'), ext('DeedShare Labs', 'https://labs.mydeedshare.com/') ] },
+      { title:'Side missions', items:[ ext('Pynding', 'https://pynding.com/promo'), ext('DeedShare Labs', 'https://labs.mydeedshare.com/'), ext('FITHR', 'https://fithr-sooty.vercel.app/') ] },
       { title:'Say hi', items:[ act('Get connected', this.props.onConnect, '/#get-connected', 'Before we meet'), page('Digital card', '/card'), email ? ext(email, 'mailto:' + email) : pending('Email') ] },
     ] };
   }

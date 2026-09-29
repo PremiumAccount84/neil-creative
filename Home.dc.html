@@ -151,7 +151,7 @@ input,select,button{font:inherit}
     <section data-snap="8" data-screen-label="09 Side missions" aria-labelledby="h-side" style="min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:calc(76px + env(safe-area-inset-top)) clamp(20px,5vw,64px) calc(32px + env(safe-area-inset-bottom));background:#000000;color:#FFFFFF;">
       <div style="width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
         <h2 id="h-side" style="margin:0 0 4px;font-weight:400;font-size:clamp(28px,3.4vw,44px);line-height:1.1;letter-spacing:-0.02em;">Things I’ve built <span style="color:#A6A6A6;">/ Side missions</span></h2>
-        <div style="display:grid;grid-template-columns:{{ cols2 }};gap:10px;">
+        <div style="display:grid;grid-template-columns:{{ sideCols }};gap:10px;">
           <article style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#111111;border:1px solid #262626;">
             <div style="display:flex;align-items:center;gap:12px;">
               <span aria-hidden="true" style="flex:0 0 auto;width:40px;height:40px;border-radius:10px;background:#000000;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:20px;">P</span>
@@ -167,6 +167,14 @@ input,select,button{font:inherit}
             </div>
             <p style="margin:0;font-size:16px;line-height:1.5;color:#CCCCCC;">A contributor network bringing together experts across real estate, fintech, AI, and product to make real estate ownership more accessible.</p>
             <a href="https://labs.mydeedshare.com/" target="_blank" rel="noopener" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;" style-hover="text-decoration:underline;">Explore DeedShare Labs ↗</a>
+          </article>
+          <article style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#111111;border:1px solid #262626;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span aria-hidden="true" style="flex:0 0 auto;width:40px;height:40px;border-radius:10px;background:#000000;color:#CCFF00;display:flex;align-items:center;justify-content:center;font-size:20px;">F</span>
+              <h3 style="margin:0;font-size:19px;font-weight:500;">FITHR</h3>
+            </div>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:#CCCCCC;">Personalized fitness coaching built around longevity.</p>
+            <a href="https://fithr-sooty.vercel.app/" target="_blank" rel="noopener" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;" style-hover="text-decoration:underline;">Explore FITHR ↗</a>
           </article>
         </div>
       </div>
@@ -276,6 +284,7 @@ class Component extends DCLogic {
       ov: formOpen ? 'hidden' : 'auto',
       snap: formOpen ? 'none' : 'y mandatory',
       sb: reduce ? 'auto' : 'smooth',
+      sideCols: wide ? 'repeat(3,minmax(0,1fr))' : 'minmax(0,1fr)',
       cols2: wide ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)',
       imgOrder: wide ? 2 : 0,
       heroImgH: wide ? 'min(72dvh, 680px)' : 'clamp(180px, 30dvh, 300px)',
