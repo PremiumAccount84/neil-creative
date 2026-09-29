@@ -5,8 +5,12 @@ module.exports = async (req, res) => {
     return res.status(405).end();
   }
   try {
-    const upstream = await fetch('https://thechrisneil.substack.com/feed', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NeilCreativeSiteBot/1.0)', Accept: 'application/rss+xml, application/xml' },
+    // Rotate the upstream cache key every five minutes so title edits do not
+    // remain stuck in Substack's longer-lived default feed cache.
+    const feedUrl = new URL('https://thechrisneil.substack.com/feed');
+    feedUrl.searchParams.set('refresh', String(Math.floor(Date.now() / 300000)));
+    const upstream = await fetch(feedUrl.toString(), {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NeilCreativeSiteBot/1.0)', Accept: 'application/rss+xml, application/xml', 'Cache-Control': 'no-cache' },
       signal: AbortSignal.timeout(8000),
     });
     if (!upstream.ok) throw new Error('Substack feed unavailable');
