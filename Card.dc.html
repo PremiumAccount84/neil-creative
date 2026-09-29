@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/site-config.js"></script>
+<script src="/writing-feed.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -176,16 +177,16 @@ class Component extends DCLogic {
     const scanned = q.get('src') === 'qr' || location.hash === '#scan';
     if (scanned) { this.lock(true); this.setState({ scanOpen:true }); }
     this.loadLatestPost();
+    this.feedTimer = setInterval(() => { if (!document.hidden) this.loadLatestPost(); }, 300000);
   }
   loadLatestPost() {
-    fetch(SUPABASE_URL + '/rest/v1/writing_posts?select=title,url,excerpt,published_at&order=published_at.desc.nullslast&limit=1', {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
-    })
-      .then(res => res.ok ? res.json() : [])
-      .then(rows => { if (rows && rows[0]) this.setState({ latestPost: rows[0] }); })
+    window.NeilWriting.load()
+      .then(({ posts }) => {
+        if (!this.disposed && posts[0]) this.setState({ latestPost: posts[0] });
+      })
       .catch(() => {});
   }
-  componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearTimeout(this.t); clearTimeout(this.tt); }
+  componentWillUnmount() { this.disposed = true; clearInterval(this.feedTimer); window.removeEventListener('resize', this.onResize); clearTimeout(this.t); clearTimeout(this.tt); }
   scanValidate() {
     const f = this.state.sc, e = {};
     if (!f.first.trim()) e.first = 'Required.';
@@ -243,7 +244,7 @@ class Component extends DCLogic {
       latestUrl: lp ? lp.url : '#',
       latestTitle: lp ? lp.title : '',
       latestExcerpt: excerptRaw.length > 160 ? excerptRaw.slice(0, 160) + '…' : excerptRaw,
-      latestDate: lp && lp.published_at ? new Date(lp.published_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '',
+      latestDate: lp ? lp.date : '',
       qOpen: this.state.qOpen, sOpen: this.state.sOpen,
       openQ: () => { this.lock(true); this.setState({ qOpen:true }); },
       closeQ: () => { this.lock(false); this.setState({ qOpen:false }); },
