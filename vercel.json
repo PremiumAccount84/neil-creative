@@ -14,7 +14,7 @@
     },
     {
       "source": "/allison",
-      "destination": "/Allison.html"
+      "destination": "/api/allison"
     }
   ],
   "crons": [
