@@ -11,6 +11,10 @@
     {
       "source": "/writing",
       "destination": "/Writing.dc.html"
+    },
+    {
+      "source": "/allison",
+      "destination": "/Allison.html"
     }
   ],
   "crons": [
@@ -39,7 +43,23 @@
       "source": "/get-connected/:path*",
       "destination": "/#get-connected",
       "permanent": true
+    },
+    {
+      "source": "/Allison.html",
+      "destination": "/allison",
+      "permanent": true
     }
   ],
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/allison",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ]
 }
