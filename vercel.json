@@ -15,6 +15,10 @@
     {
       "source": "/allison",
       "destination": "/api/allison"
+    },
+    {
+      "source": "/allison/:page",
+      "destination": "/api/allison?page=:page"
     }
   ],
   "crons": [
@@ -53,7 +57,7 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/allison",
+      "source": "/allison/:path*",
       "headers": [
         {
           "key": "X-Robots-Tag",
