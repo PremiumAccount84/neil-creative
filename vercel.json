@@ -19,6 +19,14 @@
     {
       "source": "/allison/:page",
       "destination": "/api/allison?page=:page"
+    },
+    {
+      "source": "/thumbprint",
+      "destination": "/thumbprint-assets/welcome.html"
+    },
+    {
+      "source": "/thumbprint/newsroom",
+      "destination": "/thumbprint-assets/newsroom.html"
     }
   ],
   "crons": [
