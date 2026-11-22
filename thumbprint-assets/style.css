@@ -45,3 +45,24 @@ p{margin:.5em 0}.gate {min-height:100svh;display:grid;align-items:center;positio
 .read-button {margin-top:12px}.read-button:focus-visible,.close-button:focus-visible {outline:3px solid white;outline-offset:4px}
 .story-dialog {width:min(92vw,550px);max-height:85dvh;overflow:auto;border:1px solid #427581;border-radius:20px;background:#101c40;color:white;padding:clamp(22px,5vw,40px)}
 .story-dialog::backdrop {background:#030917d9}.story-dialog h2 {font-size:clamp(34px,6vw,52px)}.story-dialog .more {display:block}.story-dialog form {margin-top:20px}
+
+/* The scroll viewport frames a single editorial card at every snap point. */
+.feed {
+  padding-inline:clamp(12px,3vw,48px);
+  scroll-padding-block-start:10px;
+}
+.slide {
+  margin:10px auto 16px;
+  width:100%;
+  max-width:1380px;
+  min-height:calc(100% - 20px);
+  border:1px solid #384969;
+  border-radius:clamp(20px,3vw,32px);
+  overflow:clip;
+  background:#17284b;
+}
+.slide .caption {padding-inline:clamp(20px,4vw,58px)}
+.slide .advance {padding-right:clamp(20px,4vw,58px)}
+@media(min-width:800px) and (min-height:480px) {
+  .slide .art {border-radius:inherit;border-top-right-radius:0;border-bottom-right-radius:0}
+}
