@@ -27,6 +27,10 @@
     {
       "source": "/thumbprint/newsroom",
       "destination": "/api/thumbprint"
+    },
+    {
+      "source": "/thumbprint/newsroom/:release",
+      "destination": "/api/thumbprint?release=:release"
     }
   ],
   "crons": [

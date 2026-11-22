@@ -73,3 +73,18 @@ p{margin:.5em 0}.gate {min-height:100svh;display:grid;align-items:center;positio
 .slide .caption {padding-block:clamp(14px,2.7vh,28px)}
 @media(max-width:799px){.slide .art {height:clamp(125px,29dvh,300px)}}
 @media(min-width:800px) and (min-height:480px){.slide{grid-template-rows:1fr}.slide .art{grid-row:1}.slide .caption{grid-row:1}}
+
+.slide {position:relative}
+.read-button {display:inline-flex;align-items:center;text-decoration:none}
+.read-button::after {content:"";position:absolute;inset:0;z-index:1;border-radius:inherit}
+.read-button:focus-visible::after {outline:2px solid #5fd8e8;outline-offset:-3px}
+.release {background:#101c40;color:#f5f9ff;min-height:100vh}
+.release header {display:flex;align-items:center;justify-content:space-between;padding:16px max(6vw,20px);border-bottom:1px solid #384969}
+.release header img {width:115px;filter:brightness(0) invert(1)}
+.release a {color:#5fd8e8;text-underline-offset:4px}
+.release main {max-width:760px;margin:0 auto;padding:clamp(36px,7vw,84px) 22px}
+.release h1 {font-size:clamp(50px,8vw,90px);margin:.22em 0}
+.release .eyebrow {color:#5fd8e8}.release .lead {font-size:clamp(19px,3vw,26px);line-height:1.45}
+.release .press-photo {width:100%;max-height:380px;object-fit:cover;object-position:50% 36%;border-radius:20px;margin:24px 0 0}
+.release h2 {font-size:clamp(30px,4.3vw,42px);margin:1.1em 0 .3em}
+.release article>p:not(.eyebrow) {color:#e0e7f1}.release footer {border-top:1px solid #384969;margin-top:34px;padding-top:20px}
