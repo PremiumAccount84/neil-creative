@@ -26,7 +26,7 @@
     },
     {
       "source": "/thumbprint/newsroom",
-      "destination": "/thumbprint-assets/newsroom.html"
+      "destination": "/api/thumbprint"
     }
   ],
   "crons": [
@@ -60,6 +60,11 @@
       "source": "/Allison.html",
       "destination": "/allison",
       "permanent": true
+    },
+    {
+      "source": "/thumbprint-assets/newsroom.html",
+      "destination": "/thumbprint/newsroom",
+      "permanent": false
     }
   ],
   "trailingSlash": false,

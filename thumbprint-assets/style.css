@@ -6,14 +6,6 @@ h1,h2,h3,.display{font:300 clamp(44px,7vw,94px)/.99 IvyPresto,Georgia,serif;lett
 p{margin:.5em 0}header{display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,20px);height:72px;gap:14px;border-bottom:1px solid #172e3026}
 header img{width:145px;display:block}.launch header{position:fixed;inset:0 0 auto;z-index:10;background:linear-gradient(#071b1de6,#071b1d80);border-color:#ffffff2b}.launch header img{filter:brightness(0) invert(1)}
 header a{text-decoration:none;font-size:14px}header a:last-child:hover,.more:hover{text-decoration:underline}
-.launch{color:white;background:#081b1d}.reel{height:100vh;height:100svh;overflow-y:auto;scroll-snap-type:y mandatory}
-.scene{position:sticky;top:0;isolation:isolate;min-height:100%;display:grid;align-items:center;padding:100px 7vw 88px;scroll-snap-align:start;background:#092b30}
-.scene::before,.scene::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}.first{background:radial-gradient(ellipse at 76% 37%,#105458,#071e23 66%)}.first::before{background:url('./imprint.svg') right 6% center / auto 88% no-repeat}
-.second::before{background:url('./culture.webp') center 38% / cover}.second::after{background:linear-gradient(90deg,#051319eb,#06181d60 74%)}
-.last{background:radial-gradient(ellipse at 78% 40%,#3a7074,#10363a 65%)}.last::before{background:url('./imprint.svg') right -18vw top 55% / 75vw auto no-repeat;opacity:.38}
-.copy{max-width:730px}.scene h1,.scene h2{font-size:clamp(62px,8.6vw,142px);max-width:10em}.scene p:not(.eyebrow){max-width:38ch;font-size:clamp(16px,1.5vw,22px);color:#e6eeee}
-.eyebrow{text-transform:uppercase;font-size:11px;letter-spacing:.19em;font-weight:650}.btn{display:inline-flex;align-items:center;gap:18px;border-radius:100px;background:white;color:#153b3e;text-decoration:none;font-weight:600;padding:12px 22px;margin-top:18px}.btn:hover{background:#cbe9e6}
-.next{position:absolute;bottom:24px;left:7vw;text-decoration:none;font-size:13px;letter-spacing:.04em}
 .news{max-width:1160px;margin:auto;padding:clamp(40px,6vw,84px) 5vw 80px}.news>h1{margin-top:0}.intro{font-size:19px;color:#506266;margin-bottom:32px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .story{overflow:hidden;background:white;border-radius:18px}.story .art{display:block;width:100%;aspect-ratio:1.95;object-fit:cover;object-position:50% 37%}
@@ -23,3 +15,17 @@ header a{text-decoration:none;font-size:14px}header a:last-child:hover,.more:hov
 .typeart.dark{background:#173337;color:#e4f0eb}.more,summary{display:inline-block;color:#056c70;font-weight:600;margin-top:12px;font-size:15px}summary{display:list-item;cursor:pointer}details p{margin-top:12px}
 @media(max-width:700px){header{height:60px}header img{width:120px}.grid,.story.feature{display:block}.story{margin-bottom:20px}.feature .art{min-height:0;height:auto}.first::before{background-position:center top 16%;background-size:auto 52%;opacity:.75}.first{align-items:end}.second::before{background-position:63% center}.second::after{background:linear-gradient(0deg,#04191df2,#091c2050 76%)}.second,.last{align-items:end}.scene h1,.scene h2{font-size:clamp(50px,14vw,82px)}.scene{padding-bottom:80px}.next{bottom:17px}}
 @media(max-height:550px),(prefers-reduced-motion:reduce){.reel{scroll-snap-type:none}.scene{position:relative}}
+
+.gate {min-height:100svh;display:grid;align-items:center;position:relative;isolation:isolate;padding:clamp(28px,7vw,110px);overflow:hidden;color:white;background:radial-gradient(ellipse at 77% 42%,#154f53,#071e23 68%)}
+.gate::before {content:"";position:absolute;inset:0;z-index:-1;background:url('./imprint.svg') right 6% center / auto 84% no-repeat;pointer-events:none}
+.gate-logo {width:148px;filter:brightness(0) invert(1);margin-bottom:clamp(24px,5vh,60px)}
+.gate h1 {font-size:clamp(65px,8.4vw,132px);margin:0 0 .18em}
+.gate form {margin-top:28px;max-width:395px}
+.gate label {display:block;font-size:14px;margin-bottom:8px}
+.code-row {display:flex;gap:8px}
+.code-row input,.code-row button {font:inherit;border-radius:10px;padding:12px 16px}
+.code-row input {min-width:0;width:100%;border:1px solid #86a5a7;background:#0a272c;color:white}
+.code-row button {border:0;background:#e5f4ef;color:#12383b;font-weight:600;cursor:pointer}
+.gate :focus-visible {outline:3px solid #94ece7;outline-offset:3px}
+#error {display:none;color:#ffd7bc;font-size:14px}#error:target {display:block}
+@media(max-width:760px){.gate::before{background-position:right -14vw top -7vh;background-size:auto 52%;opacity:.32}.gate{align-items:center}.gate-logo{width:125px}}
