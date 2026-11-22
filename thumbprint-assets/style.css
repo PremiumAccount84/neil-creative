@@ -3,19 +3,19 @@
 body{margin:0;color:#172e30;background:#f5f5f1;font:16px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 a{color:inherit}a:focus-visible,summary:focus-visible{outline:3px solid #edab43;outline-offset:4px}
 h1,h2,h3,.display{font:300 clamp(44px,7vw,94px)/.99 IvyPresto,Georgia,serif;letter-spacing:-.035em;margin:.18em 0 .28em}
-p{margin:.5em 0}.gate {min-height:100svh;display:grid;align-items:center;position:relative;isolation:isolate;padding:clamp(28px,7vw,110px);overflow:hidden;color:white;background:radial-gradient(ellipse at 77% 42%,#154f53,#071e23 68%)}
-.gate::before {content:"";position:absolute;inset:0;z-index:-1;background:url('./imprint.svg') right 6% center / auto 84% no-repeat;pointer-events:none}
+p{margin:.5em 0}.gate {min-height:100svh;display:grid;align-items:center;position:relative;isolation:isolate;padding:clamp(28px,7vw,110px);overflow:hidden;color:white;background:#101c40}
+.gate::before {content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(145deg,#17284b 12%,#5fd8e8 55%,#17284b 92%);mask:url('./imprint.svg') right 6% center / auto 84% no-repeat;pointer-events:none}
 .gate-logo {width:148px;filter:brightness(0) invert(1);margin-bottom:clamp(24px,5vh,60px)}
 .gate h1 {font-size:clamp(65px,8.4vw,132px);margin:0 0 .18em}
 .gate form {margin-top:28px;max-width:395px}
 .gate label {display:block;font-size:14px;margin-bottom:8px}
 .code-row {display:flex;gap:8px}
 .code-row input,.code-row button {font:inherit;border-radius:10px;padding:12px 16px}
-.code-row input {min-width:0;width:100%;border:1px solid #86a5a7;background:#0a272c;color:white}
-.code-row button {border:0;background:#e5f4ef;color:#12383b;font-weight:600;cursor:pointer}
-.gate :focus-visible {outline:3px solid #94ece7;outline-offset:3px}
+.code-row input {min-width:0;width:100%;border:1px solid  #5fd8e8;background:#17284b;color:white}
+.code-row button {border:0;background:#5fd8e8;color:#101c40;font-weight:600;cursor:pointer}
+.gate :focus-visible {outline:3px solid #5fd8e8;outline-offset:3px}
 #error {display:none;color:#ffd7bc;font-size:14px}#error:target {display:block}
-@media(max-width:760px){.gate::before{background-position:right -14vw top -7vh;background-size:auto 52%;opacity:.32}.gate{align-items:center}.gate-logo{width:125px}}
+@media(max-width:760px){.gate::before{mask-position:right -14vw top -7vh;mask-size:auto 52%;opacity:.32}.gate{align-items:center}.gate-logo{width:125px}}
 
 .eyebrow {text-transform:uppercase;font-size:11px;letter-spacing:.18em;font-weight:650}
 .edition {height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:#f7f8f5}
@@ -88,3 +88,5 @@ p{margin:.5em 0}.gate {min-height:100svh;display:grid;align-items:center;positio
 .release .press-photo {width:100%;max-height:380px;object-fit:cover;object-position:50% 36%;border-radius:20px;margin:24px 0 0}
 .release h2 {font-size:clamp(30px,4.3vw,42px);margin:1.1em 0 .3em}
 .release article>p:not(.eyebrow) {color:#e0e7f1}.release footer {border-top:1px solid #384969;margin-top:34px;padding-top:20px}
+
+.gate label {color:#5fd8e8}.gate p:not(#error) {color:#e0e7f1}
