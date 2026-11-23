@@ -25,6 +25,13 @@
 .member-hero .member-stage{height:auto;aspect-ratio:1.12}
 :is(.edition,.membership) .member-card .product-pair{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
 :is(.edition,.membership) .member-card .phone-light{left:2%;right:auto;top:max(7%,calc(100% - 126cqw));width:72%;aspect-ratio:0.48;filter:drop-shadow(0 0 2px #a3f4ff77) drop-shadow(0 0 12px #4abdc944)}
+@keyframes phone-edge-glow{
+  from{filter:drop-shadow(0 0 2px #75eff2aa) drop-shadow(0 0 7px #31cede55)}
+  to{filter:drop-shadow(0 0 4px #93ffff) drop-shadow(0 0 17px #27e2edbb)}
+}
+@media(prefers-reduced-motion:no-preference){
+  :is(.edition,.membership) .member-card .phone-light{animation:phone-edge-glow 1.8s ease-in-out infinite alternate}
+}
 :is(.edition,.membership) .member-card .member-phone{position:absolute;width:221%;max-width:none;left:-94.05%;top:-2.15%;height:auto;clip-path:inset(2.2% 12.55% 4.2% 42.55% round 7.1% / 7.2%)}
 :is(.edition,.membership) .member-card .product-brand{bottom:auto;top:52%;transform:translateY(-50%);right:3%;width:19%;z-index:1}
 :is(.edition,.membership) .member-card .product-wordmark{margin-bottom:3.4cqw;text-shadow:0 1px 5px #040810}
