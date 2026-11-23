@@ -1,9 +1,15 @@
 .membership,.edition .feed>.member-card{background:radial-gradient(ellipse at 50% 35%,#101c35 0%,#080e1b 40%,#040810 78%)}
 .member-phone{display:block;max-width:100%;height:auto;clip-path:polygon(18.25% 2.25%,17.25% 2.50%,17.25% 2.50%,16.00% 3.00%,16.00% 3.00%,14.92% 3.75%,14.92% 3.75%,14.17% 4.50%,14.17% 4.50%,13.58% 5.25%,13.58% 5.25%,13.08% 6.25%,13.08% 6.25%,12.83% 7.00%,12.83% 7.00%,12.58% 8.25%,12.58% 8.25%,12.58% 8.75%,12.58% 8.75%,12.50% 9.00%,12.50% 9.00%,12.50% 30.00%,12.50% 30.00%,12.42% 30.25%,12.42% 30.25%,12.42% 39.00%,12.42% 39.00%,12.25% 39.75%,12.25% 39.75%,12.50% 40.25%,12.50% 40.25%,12.50% 89.00%,12.50% 89.00%,12.67% 90.25%,12.67% 90.25%,13.00% 91.50%,13.00% 91.50%,13.33% 92.25%,13.33% 92.25%,14.00% 93.25%,14.00% 93.25%,14.42% 93.75%,14.42% 93.75%,15.33% 94.50%,15.33% 94.50%,16.17% 95.00%,16.17% 95.00%,17.50% 95.50%,17.50% 95.50%,17.83% 95.75%,17.83% 95.75%,81.92% 95.75%,81.92% 95.75%,83.75% 95.00%,83.75% 95.00%,84.58% 94.50%,84.58% 94.50%,85.25% 94.00%,85.25% 94.00%,85.92% 93.25%,85.92% 93.25%,86.58% 92.25%,86.58% 92.25%,86.92% 91.50%,86.92% 91.50%,87.25% 90.25%,87.25% 90.25%,87.42% 89.00%,87.42% 89.00%,87.42% 40.25%,87.42% 40.25%,87.67% 40.00%,87.67% 40.00%,87.67% 39.50%,87.67% 39.50%,87.58% 39.25%,87.58% 39.25%,87.58% 30.75%,87.58% 30.75%,87.42% 29.75%,87.42% 29.75%,87.42% 9.00%,87.42% 9.00%,87.17% 7.25%,87.17% 7.25%,86.83% 6.25%,86.83% 6.25%,86.00% 4.75%,86.00% 4.75%,85.00% 3.75%,85.00% 3.75%,83.92% 3.00%,83.92% 3.00%,83.42% 2.75%,83.42% 2.75%,81.67% 2.25%)}
 .member-stage{position:relative;overflow:hidden;min-height:0;isolation:isolate}
-.product-pair{position:relative;width:100%;height:100%;overflow:hidden}
-.phone-light{display:block;position:absolute;top:13%;left:-4%;width:87%;filter:drop-shadow(0 0 2px #99ffff) drop-shadow(0 0 13px #30e0e987)}
-.icon-light{display:block;position:absolute;right:6%;top:33%;width:18%;border-radius:23%;box-shadow:0 0 2px 1px #9afaff,0 0 22px #34deec99,0 0 40px #27b9d04d;animation:member-icon-breathe 3.2s ease-in-out infinite}
+.member-stage{display:grid;place-items:center;container-type:size}
+.product-pair{position:relative;width:min(100cqw,145cqh);aspect-ratio:1.45;container-type:inline-size}
+.phone-light{display:block;position:absolute;top:0;left:1%;width:68%;filter:drop-shadow(0 0 1px #aeffff) drop-shadow(0 0 9px #30e0e959)}
+.product-brand{position:absolute;right:7.6%;bottom:5%;width:27%;text-align:center}
+.product-wordmark{display:flex;align-items:center;flex-direction:column;color:white;font-family:Arial,Helvetica,sans-serif;line-height:.86;margin-bottom:6.8cqw}
+.product-wordmark i{font-size:3.2cqw;letter-spacing:-.06em;padding-right:.9em}
+.product-wordmark strong{font-size:5.25cqw;font-weight:800;letter-spacing:-.075em}
+.member-icon{filter:url(#member-ink)}
+.icon-light{display:block;position:relative;width:100%;border-radius:23%;box-shadow:0 0 2px 1px #9afaff,0 0 22px #34deec99,0 0 40px #27b9d04d;animation:member-icon-breathe 3.2s ease-in-out infinite}
 .member-icon{display:block;width:100%;height:auto;border-radius:inherit}
 @keyframes member-icon-breathe{0%,100%{transform:scale(.97);box-shadow:0 0 2px 1px #99faff,0 0 14px #34deec80,0 0 32px #27b9d040}50%{transform:scale(1.045);box-shadow:0 0 3px 1px #c5ffff,0 0 27px #34deecbf,0 0 54px #27b9d077}}
 @media(prefers-reduced-motion:reduce){.icon-light{animation:none}}
@@ -16,16 +22,16 @@
 .membership .member-button{display:inline-flex;text-decoration:none;background:#5fd8e8;color:#081322;border-radius:30px;padding:13px 20px;font-weight:650;margin-top:8px}
 .member-details{max-width:700px;margin:auto;border-top:1px solid #344258;padding-top:12px}
 
-.member-hero .member-stage{height:auto;aspect-ratio:1.7}
+.member-hero .member-stage{height:auto;aspect-ratio:1.12}
 .edition .member-card .member-stage{flex:1}
 @media(min-width:800px){
 .member-hero{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;min-height:68vh}
-.member-hero .member-stage{aspect-ratio:1.42}
+.member-hero .member-stage{aspect-ratio:.97}
 .edition .member-card .member-stage{position:absolute;inset:8% 2% 17% 46%}
 .edition .member-card .caption{max-width:51%}
 .edition .member-card h2{font-size:clamp(48px,5.8vw,82px)}
 }
 @media(max-width:799px){
 .member-hero .member-stage{grid-row:1}
-.edition .member-card .product-pair{position:absolute;inset:0;max-height:100%;height:auto;aspect-ratio:1.58;margin:auto}
+
 }
