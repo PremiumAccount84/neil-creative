@@ -24,9 +24,10 @@
 
 .member-hero .member-stage{height:auto;aspect-ratio:1.12}
 .edition .member-card .product-pair{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
-.edition .member-card .phone-light{left:auto;right:4%;top:12%;width:max(137cqw,112cqh)}
-.edition .member-card .product-brand{bottom:9%;right:4%;width:17%;z-index:1}
-.edition .member-card .product-wordmark{margin-bottom:2cqw;text-shadow:0 1px 5px #040810}
+.edition .member-card .phone-light{left:2%;right:auto;top:max(7%,calc(100% - 126cqw));width:72%;aspect-ratio:0.48;filter:drop-shadow(0 0 2px #a3f4ff77) drop-shadow(0 0 12px #4abdc944)}
+.edition .member-card .member-phone{position:absolute;width:221%;max-width:none;left:-94.05%;top:-2.15%;height:auto;clip-path:inset(2.2% 12.55% 4.2% 42.55% round 7.1% / 7.2%)}
+.edition .member-card .product-brand{bottom:auto;top:52%;transform:translateY(-50%);right:3%;width:19%;z-index:1}
+.edition .member-card .product-wordmark{margin-bottom:3.4cqw;text-shadow:0 1px 5px #040810}
 .edition .member-card .product-wordmark strong{font-size:3.7cqw}
 .edition .member-card .product-wordmark i{font-size:2.4cqw}
 
